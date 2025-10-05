@@ -14,6 +14,8 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import java.text.SimpleDateFormat;
+import javax.swing.text.DateFormatter;
 
 
 /**
@@ -50,17 +52,15 @@ public class Cliente extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         txtId = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        txtNombreProveedor = new javax.swing.JTextField();
+        txtNombre = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        txtNit = new javax.swing.JTextField();
-        txtNombreContacto = new javax.swing.JTextField();
+        txtTelefono = new javax.swing.JTextField();
+        txtCorreo = new javax.swing.JTextField();
         txtDireccion = new javax.swing.JTextField();
-        txtTelefonoEmpresa = new javax.swing.JTextField();
-        txtTelefonoContacto = new javax.swing.JTextField();
+        txtFechaIngreso = new javax.swing.JFormattedTextField();
         jPanel2 = new javax.swing.JPanel();
         btnRegistrar = new javax.swing.JButton();
         btnActualizar = new javax.swing.JButton();
@@ -73,27 +73,27 @@ public class Cliente extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("P R O V E E D O R E S");
+        jLabel1.setText("C L I E N T E S");
 
         jLabel2.setText("Id:");
 
-        jLabel3.setText("Nombre proveedor:");
+        jLabel3.setText("Nombre:");
 
-        jLabel4.setText("NIT:");
+        jLabel4.setText("Teléfono:");
 
-        jLabel5.setText("Nombre contacto: ");
+        jLabel5.setText("Correo:");
 
         jLabel6.setText("Dirección: ");
 
-        jLabel7.setText("Teléfono Empresa: ");
-
-        jLabel8.setText("Teléfono Contacto: ");
+        jLabel7.setText("Fecha Ingreso: ");
 
         txtDireccion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtDireccionActionPerformed(evt);
             }
         });
+
+        txtFechaIngreso.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -105,7 +105,6 @@ public class Cliente extends javax.swing.JFrame {
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -114,13 +113,12 @@ public class Cliente extends javax.swing.JFrame {
                             .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtId)
-                            .addComponent(txtNombreProveedor)
-                            .addComponent(txtNit)
-                            .addComponent(txtNombreContacto)
+                            .addComponent(txtId, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
+                            .addComponent(txtNombre)
+                            .addComponent(txtTelefono)
+                            .addComponent(txtCorreo)
                             .addComponent(txtDireccion)
-                            .addComponent(txtTelefonoEmpresa)
-                            .addComponent(txtTelefonoContacto, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE))
+                            .addComponent(txtFechaIngreso))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -136,15 +134,15 @@ public class Cliente extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
-                    .addComponent(txtNombreProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(txtNit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(txtNombreContacto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
@@ -152,11 +150,7 @@ public class Cliente extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(txtTelefonoEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtTelefonoContacto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtFechaIngreso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -229,7 +223,8 @@ public class Cliente extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -241,43 +236,51 @@ public class Cliente extends javax.swing.JFrame {
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
         try{
-            String nombreProveedor = txtNombreProveedor.getText();
-            String nit = txtNit.getText();
-            String nombreContacto = txtNombreContacto.getText();
+            int clienteId = Integer.parseInt(txtId.getText().strip());
+            String nombre = txtNombre.getText();
+            String telefono = txtTelefono.getText();
+            String correo = txtCorreo.getText();
             String direccion = txtDireccion.getText();
-            String telefonoEmpresa = txtTelefonoEmpresa.getText();
-            String telefonoContacto = txtTelefonoContacto.getText();
-            int proveedor_id = Integer.parseInt(txtId.getText());
-
-            String qry = "UPDATE public.proveedores SET nombre_proveedor = ?, nit = ?, nombre_contacto = ?, direccion = ?, telefono_empresa = ?, telefono_contacto = ?  WHERE proveedor_id = ?";
+            
+            java.util.Date fechaIngreso = (java.util.Date) txtFechaIngreso.getValue();
+            java.sql.Date fechaSQL = new java.sql.Date(fechaIngreso.getTime());
+            
+            if (nombre.isEmpty() || telefono.isEmpty() || correo.isEmpty() ||
+            direccion.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Complete todos los campos antes de actualizar.");
+            return;
+            }
+            
+            String qry = "UPDATE public.clientes SET nombre = ?, telefono = ?, correo = ?, direccion = ?, fecha_ingreso = ?  WHERE cliente_id = ?";
             PreparedStatement ps = con.prepareStatement(qry);
-            ps.setString(1, nombreProveedor);
-            ps.setString(2, nit);
-            ps.setString(3, nombreContacto);
+            ps.setString(1, nombre);
+            ps.setString(2, telefono);
+            ps.setString(3, correo);
             ps.setString(4, direccion);
-            ps.setString(5, telefonoEmpresa);
-            ps.setString(6, telefonoContacto);
-            ps.setInt(7, proveedor_id);
+            ps.setDate(5, fechaSQL);
+            ps.setInt(6, clienteId);
+     
             
             
             int filasActualizadas = ps.executeUpdate();
             
             if (filasActualizadas > 0){
                 JOptionPane.showMessageDialog(null, "Registro actualizado correctamente.");
+                limpiar();
             }else {
-                JOptionPane.showMessageDialog(null, "No se encontró un estudiante con el ID " + proveedor_id);
+                JOptionPane.showMessageDialog(null, "No se encontró un Cliente con el ID " + clienteId);
             }
             ps.close();
             
         }catch(SQLException e){
-            e.getMessage();
+            JOptionPane.showMessageDialog(null, "Error al actualizar registro: " + e.getMessage());
         }
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarActionPerformed
         try{ 
             int id = Integer.parseInt(txtId.getText().trim());
-            String qry = "SELECT * FROM public.proveedores WHERE proveedor_id = ?";
+            String qry = "SELECT * FROM public.clientes WHERE cliente_id = ?";
             
             try(PreparedStatement ps = con.prepareStatement(qry)){
                 ps.setInt(1, id);
@@ -285,25 +288,28 @@ public class Cliente extends javax.swing.JFrame {
                 try (ResultSet rs = ps.executeQuery()){
                     if (rs.next()){
                         
-                        String nombreProveedor = rs.getString("nombre_proveedor");
-                        String nit = rs.getString("nit");
-                        String nombreContacto = rs.getString("nombre_contacto");
+                        String nombre = rs.getString("nombre");
+                        String telefono = rs.getString("telefono");
+                        String correo = rs.getString("correo");
                         String direccion = rs.getString("direccion");
-                        String telefonoEmpresa = rs.getString("telefono_empresa");
-                        String telefonoContacto = rs.getString("telefono_contacto");
                         
-                        txtNombreProveedor.setText(nombreProveedor);
-                        txtNit.setText(nit);
-                        txtNombreContacto.setText(nombreContacto);                      
+                        txtNombre.setText(nombre);
+                        txtTelefono.setText(telefono);
+                        txtCorreo.setText(correo);                      
                         txtDireccion.setText(direccion);
-                        txtTelefonoEmpresa.setText(telefonoEmpresa);
-                        txtTelefonoContacto.setText(telefonoContacto);
-                       
                         
-                        JOptionPane.showMessageDialog(this, "Registro encontrado: " + nombreProveedor );
+                        java.sql.Date fechaSQL = rs.getDate("fecha_ingreso");
+                        if (fechaSQL != null) {
+                        txtFechaIngreso.setValue(new java.util.Date(fechaSQL.getTime()));
+                        } else {
+                        txtFechaIngreso.setValue(null); 
+                        }
+
+                        
+                        JOptionPane.showMessageDialog(this, "Registro encontrado: " + nombre );
                         
                     }else{
-                        JOptionPane.showMessageDialog(null, "No se encontró el Proveedor con ID: " + id);
+                        JOptionPane.showMessageDialog(null, "No se encontró el Cliente con el ID: " + id);
                     }
                 }
             }
@@ -311,33 +317,52 @@ public class Cliente extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }//GEN-LAST:event_btnConsultarActionPerformed
-
+    
+    public void limpiar(){
+        txtId.setText("");
+        txtNombre.setText("");
+        txtTelefono.setText("");
+        txtCorreo.setText("");
+        txtDireccion.setText("");        
+        txtFechaIngreso.setText("");        
+        txtId.requestFocus();
+        
+        
+    }
+    
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
     try{
-            String nombreProveedor = txtNombreProveedor.getText();
-            String nit = txtNit.getText();
-            String nombreContacto = txtNombreContacto.getText();
+            String nombreCliente = txtNombre.getText();
+            String telefono = txtTelefono.getText();
+            String correo = txtCorreo.getText();
             String direccion = txtDireccion.getText();
-            String telefonoEmpresa = txtTelefonoEmpresa.getText();
-            String telefonoContacto = txtTelefonoContacto.getText();
             
-            String qry = "INSERT INTO public.proveedores(nombre_proveedor, nit, nombre_contacto, direccion, telefono_empresa, telefono_contacto)" + " values(?,?,?,?,?,?)";
+            java.util.Date fechaIngreso = (java.util.Date) txtFechaIngreso.getValue();
+            java.sql.Date fechaSQL = new java.sql.Date(fechaIngreso.getTime());
+            
+            if (nombreCliente.isEmpty()||telefono.isEmpty()||correo.isEmpty()||direccion.isEmpty()){
+                JOptionPane.showMessageDialog(null, "Complete todos los datos.");
+                return;
+            }            
+            
+            String qry = "INSERT INTO public.clientes(nombre, telefono, correo, direccion, fecha_ingreso)" + " values(?,?,?,?,?)";
             
             PreparedStatement ps = con.prepareStatement (qry);
-            ps.setString(1, nombreProveedor);
-            ps.setString(2, nit);
-            ps.setString(3, nombreContacto);
+            ps.setString(1, nombreCliente);
+            ps.setString(2, telefono);
+            ps.setString(3, correo);
             ps.setString(4, direccion);
-            ps.setString(5, telefonoEmpresa);
-            ps.setString(6, telefonoContacto);
+            ps.setDate(5, fechaSQL);         
             
             int filasInsertadas = ps.executeUpdate();
             
             if (filasInsertadas > 0){
                 JOptionPane.showMessageDialog(null, "El registro se ha realizado con exito.");
+                limpiar();
             }else {
                 JOptionPane.showMessageDialog(null, "No se ha podido insertar el registro.");
             }
+            ps.close();
                     
         }catch (SQLException e){
             e.getMessage();
@@ -346,25 +371,31 @@ public class Cliente extends javax.swing.JFrame {
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         try {
-        String id = txtId.getText();
+        String id = txtId.getText().trim();
         
-        String qry = "DELETE FROM public.proveedores WHERE proveedor_id = ?";
+        if (id.isEmpty()){
+            JOptionPane.showMessageDialog(null, "Ingrese el Id del Cliente.");
+            return;
+        }
+        
+        String qry = "DELETE FROM public.clientes WHERE cliente_id = ?";
         PreparedStatement ps = con.prepareStatement(qry);
         ps.setInt(1, Integer.parseInt(id));
         
         int filasEliminadas = ps.executeUpdate();
         
         if (filasEliminadas > 0){
-            JOptionPane.showMessageDialog(null, "Proveedor eliminado correctamente.");
-            
+            JOptionPane.showMessageDialog(null, "Cliente eliminado correctamente.");
+            limpiar();
         }else{
-            JOptionPane.showMessageDialog(null, "No se encontró un Proveedor con ID: "+id);
+            JOptionPane.showMessageDialog(null, "No se encontró un Cliente con el ID: "+id);
            
         }
-    }catch (NumberFormatException e){
-        JOptionPane.showMessageDialog(null, "El ID debe ser un número válido");
+    
+    }catch(NumberFormatException e){
+        JOptionPane.showMessageDialog(null, "El Id debe ser un número válido.");
     }catch (SQLException e){
-        e.getMessage();
+        JOptionPane.showMessageDialog(null, "Error al eliminar el cliente: "+e.getMessage());
     }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
@@ -405,15 +436,13 @@ public class Cliente extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtDireccion;
+    private javax.swing.JFormattedTextField txtFechaIngreso;
     private javax.swing.JTextField txtId;
-    private javax.swing.JTextField txtNit;
-    private javax.swing.JTextField txtNombreContacto;
-    private javax.swing.JTextField txtNombreProveedor;
-    private javax.swing.JTextField txtTelefonoContacto;
-    private javax.swing.JTextField txtTelefonoEmpresa;
+    private javax.swing.JTextField txtNombre;
+    private javax.swing.JTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
 }

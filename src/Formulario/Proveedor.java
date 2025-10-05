@@ -265,7 +265,7 @@ public class Proveedor extends javax.swing.JFrame {
             if (filasActualizadas > 0){
                 JOptionPane.showMessageDialog(null, "Registro actualizado correctamente.");
             }else {
-                JOptionPane.showMessageDialog(null, "No se encontró un estudiante con el ID " + proveedor_id);
+                JOptionPane.showMessageDialog(null, "No se encontró un proveedor con el ID " + proveedor_id);
             }
             ps.close();
             
