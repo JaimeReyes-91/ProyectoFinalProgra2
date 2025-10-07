@@ -24,14 +24,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-//CODIGO MIOOOOOOOOOOOOOOOOOOOOOOOO
+//hola  mundo jejejeje
 /**
  *
  * @author Coloc
  */
 public class Reportes extends javax.swing.JFrame {
     Conexion ConexionPostgres = new  Conexion();
-    Connection con;
+    Connection con; 
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Reportes.class.getName());
 
