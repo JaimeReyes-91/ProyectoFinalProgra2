@@ -35,7 +35,7 @@ public class Conexion {
     //String jndi=null; // se utiliza cuando JNDI
     
     public Conexion(){
-        String path = "C:\\Users\\Coloc\\OneDrive\\Escritorio\\Proyecto Progra II\\ProyectoFinalProgra2\\src\\Conexion\\db_config.properties";
+        String path = "C:\\Users\\Gerardo\\OneDrive - Universidad Mariano Gálvez\\Escritorio\\Proyecto Progra II\\ProyectoFinalProgra2\\src\\Conexion\\db_config.properties";
         InputStream in=null;
         
         try{
