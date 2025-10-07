@@ -24,7 +24,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-//hola  mundo jejejeje
+//hola  mundo jejejeje cambiar areglar hola hola askodjhaslkjdfhas
 /**
  *
  * @author Coloc
