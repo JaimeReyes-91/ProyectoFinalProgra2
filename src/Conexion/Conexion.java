@@ -36,10 +36,14 @@ public class Conexion {
     
     public Conexion(){
 <<<<<<< HEAD
+<<<<<<< HEAD
         String path = "C:\\Users\\Coloc\\OneDrive\\Escritorio\\Proyecto Progra II\\ProyectoFinalProgra2\\src\\Conexion\\db_config.properties";
 =======
         String path = "C:\\Users\\dinae\\OneDrive\\Documentos\\NetBeansProjects\\ProyectoFinal\\src\\Conexion\\db_config.properties";
 >>>>>>> 555917d3f053a8927db8eb06c4383dd700b02098
+=======
+        String path = "C:\\Users\\Coloc\\OneDrive\\Escritorio\\Proyecto Progra II\\ProyectoFinalProgra2\\src\\Conexion\\db_config.properties";
+>>>>>>> ramon
         InputStream in=null;
         
         try{
