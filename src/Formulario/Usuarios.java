@@ -146,7 +146,7 @@ public class Usuarios extends javax.swing.JFrame {
                 .addGap(17, 17, 17))
         );
 
-        cmbRol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administrador", "Mesero", "Cajero" }));
+        cmbRol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "administrador", "mesero", "cajero" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -242,8 +242,9 @@ public class Usuarios extends javax.swing.JFrame {
             PreparedStatement ps = con.prepareStatement(qry);
             ps.setString(1, nombreUsuario);
             ps.setString(2, clave);
-            ps.setString(3, rol);     
-            ps.setInt(6, usuarioId);
+            ps.setString(3, rol); 
+            ps.setString(4, nombreCompleto);
+            ps.setInt(5, usuarioId);
      
             
             
@@ -314,12 +315,12 @@ public class Usuarios extends javax.swing.JFrame {
             String rol = cmbRol.getSelectedItem().toString();
             String nombreCompleto = txtNombreCompleto.getText();                
             
-            if (nombreUsuario.isEmpty()||clave.isEmpty()||rol.isEmpty()||nombreCompleto.isEmpty()){
+            /*if (nombreUsuario.isEmpty()||clave.isEmpty()||rol.isEmpty()||nombreCompleto.isEmpty()){
                 JOptionPane.showMessageDialog(null, "Complete todos los datos.");
                 return;
-            }            
+            }  */          
             
-            String qry = "INSERT INTO public.usuarios(nombre_usuario, clave, rol, nombre_completo) values(?,?,?,?)";
+            String qry = "INSERT INTO public.usuarios(nombre_usuario, clave, rol, nombre_completo) VALUES(?,?,?,? )";
             
             PreparedStatement ps = con.prepareStatement (qry);
             ps.setString(1, nombreUsuario);
@@ -339,7 +340,7 @@ public class Usuarios extends javax.swing.JFrame {
             ps.close();
                     
         }catch (SQLException e){
-            e.getMessage();
+            JOptionPane.showMessageDialog(null, "Error al registrar el usuario: " + e.getMessage());
         }
     }//GEN-LAST:event_btnRegistrarActionPerformed
 

@@ -17,8 +17,8 @@ public class Main {
         Conexion conexionPostgres = new Conexion();
         Connection con = conexionPostgres.getConexion();
         
-        new Login().setVisible(true);
-        new Usuarios().setVisible(true);
+        
+        
     }
     
      

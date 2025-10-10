@@ -173,11 +173,7 @@ public class Login extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnConsultarActionPerformed
     
-    public void limpiar(){
-        txtUsuario.setText("");
-        txtClave.setText("");        
-        txtUsuario.requestFocus();
-    }
+
     
     /**
      * @param args the command line arguments
