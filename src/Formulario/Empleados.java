@@ -14,6 +14,7 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -72,8 +73,8 @@ public class Empleados extends javax.swing.JFrame {
         jLabel12 = new javax.swing.JLabel();
         txtSalario = new javax.swing.JTextField();
         cbCargo = new javax.swing.JComboBox<>();
-        txtEstado = new javax.swing.JTextField();
         txtfecha = new javax.swing.JFormattedTextField();
+        cbEstado = new javax.swing.JComboBox<>();
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 255));
 
@@ -210,6 +211,18 @@ public class Empleados extends javax.swing.JFrame {
         });
 
         txtfecha.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
+        txtfecha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtfechaActionPerformed(evt);
+            }
+        });
+
+        cbEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "activo", "inactivo" }));
+        cbEstado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbEstadoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -243,8 +256,8 @@ public class Empleados extends javax.swing.JFrame {
                     .addComponent(txtemail)
                     .addComponent(txtSalario)
                     .addComponent(cbCargo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtEstado)
-                    .addComponent(txtfecha))
+                    .addComponent(txtfecha)
+                    .addComponent(cbEstado, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -277,7 +290,7 @@ public class Empleados extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel9)
-                    .addComponent(txtEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel10)
@@ -290,7 +303,7 @@ public class Empleados extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel12)
                     .addComponent(txtSalario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -326,7 +339,7 @@ public class Empleados extends javax.swing.JFrame {
     txtSalario.setText(""); // salario
     txtfecha.setText(""); // email
     txtId.requestFocus();
-    txtEstado.setText("");
+    cbEstado.setSelectedItem("");
         
     }
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
@@ -343,7 +356,7 @@ public class Empleados extends javax.swing.JFrame {
         String cargo = cbCargo.getSelectedItem().toString();
         String direccion = txtDireccion.getText();
         String telefono = txtTelefono.getText(); // ahora como String
-        String estado = txtEstado.getText().trim().toLowerCase();
+        String estado = cbEstado.getSelectedItem().toString().toLowerCase();
 
         boolean estado1;
         if (estado.equals("activo")) {
@@ -399,30 +412,17 @@ public class Empleados extends javax.swing.JFrame {
         String cargo = cbCargo.getSelectedItem().toString(); // o txtCargo si agregas un campo específico
         String direccion = txtDireccion.getText();
         int telefono = Integer.parseInt(txtTelefono.getText());
-        String estado = txtEstado.getText(); // activo/inactivo
-        boolean estado1;
-        if (estado.equals("activo")) {
-            estado1 = true;
-        } else if (estado.equals("inactivo")) {
-            estado1 = false;
-        } else {
-            JOptionPane.showMessageDialog(null, "Escriba 'activo' o 'inactivo'");
-            return;
-        }
-        String fechaIngreso = txtfecha.getText();
+        String estado = cbCargo.getSelectedItem().toString(); // activo/inactivo
+        boolean estado1 = estado.equalsIgnoreCase("activo");
+        java.util.Date fecha = (java.util.Date) txtfecha.getValue();
+            java.sql.Date fechaSQL = new java.sql.Date(fecha.getTime());
+        
         double salario = Double.parseDouble(txtSalario.getText().trim());
         String email = txtemail.getText(); // o txtEmail
         
-java.sql.Date fecha = null; // declarar fuera del try para que esté disponible después
+//java.sql.Date fecha = null; // declarar fuera del try para que esté disponible después
 
-try {
-    SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-    java.util.Date fechaUtil = formato.parse(fechaIngreso);
-    fecha = new java.sql.Date(fechaUtil.getTime());
-} catch (ParseException pe) {
-    JOptionPane.showMessageDialog(null, "Formato de fecha inválido. Usa DD/MM/YYYY.");
-    return;
-}
+
 
         
         String qry = "UPDATE public.empleados SET nombre = ?, apellido = ?, cargo = ?, telefono = ?, direccion = ?, estado = ?, fecha_ingreso = ?, salario = ?, email = ? WHERE empleado_id = ?";
@@ -434,7 +434,7 @@ try {
         ps.setInt(4, telefono);
         ps.setString(5, direccion);
         ps.setBoolean(6, estado1);
-        ps.setDate(7, fecha);
+        ps.setDate(7, fechaSQL);
         ps.setDouble(8, salario);
         ps.setString(9, email);
         ps.setInt(10, idEmpleado);
@@ -474,7 +474,6 @@ try {
                     String direccion = rs.getString("direccion");
                     int telefono = rs.getInt("telefono");
                     String estado = rs.getString("estado");
-                    String fechaIngreso = rs.getString("fecha_ingreso");
                     double salario = rs.getDouble("salario");
                     String email = rs.getString("email");
                     
@@ -483,10 +482,18 @@ try {
                     cbCargo.setSelectedItem(cargo); // o txtCargo si lo cambias
                     txtDireccion.setText(direccion);
                     txtTelefono.setText(String.valueOf(telefono));
-                    txtEstado.setText(estado);
+                    cbEstado.setSelectedItem(estado);
                     txtemail.setText(email);
                     txtSalario.setText(String.valueOf(salario));
-                    txtfecha.setText(fechaIngreso); // o txtEmail si lo creas
+                    java.sql.Date fechaSQL = rs.getDate("fecha_ingreso");
+                        if (fechaSQL != null) {
+                            java.util.Date fecha = new java.util.Date(fechaSQL.getTime());
+                            java.text.SimpleDateFormat formato = new java.text.SimpleDateFormat("dd/MM/yyyy");
+                            String fechaFormateada = formato.format(fecha);
+                            txtfecha.setText(fechaFormateada); // Usamos setText, no setValue
+                        } else {
+                            txtfecha.setText(""); // Campo vacío si no hay fecha
+                        } // o txtEmail si lo creas
                     
                     JOptionPane.showMessageDialog(this, "Registro encontrado: " + nombre + " " + apellido);
                 } else {
@@ -555,6 +562,14 @@ try {
         // TODO add your handling code here:
     }//GEN-LAST:event_cbCargoPropertyChange
 
+    private void cbEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbEstadoActionPerformed
+           // TODO add your handling code here:
+    }//GEN-LAST:event_cbEstadoActionPerformed
+
+    private void txtfechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtfechaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtfechaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -587,6 +602,7 @@ try {
     private javax.swing.JButton btnInsertar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JComboBox<String> cbCargo;
+    private javax.swing.JComboBox<String> cbEstado;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -602,7 +618,6 @@ try {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JTextField txtApellido;
     private javax.swing.JTextField txtDireccion;
-    private javax.swing.JTextField txtEstado;
     private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtSalario;
