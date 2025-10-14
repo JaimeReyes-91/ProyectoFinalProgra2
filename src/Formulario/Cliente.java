@@ -415,7 +415,7 @@ public class Cliente extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-    new interfazMeseroCajero().setVisible(true);
+   new interfazMeseroCajero().setVisible(true);
     Cliente.this.dispose();
     // TODO add your handling code here:
     }//GEN-LAST:event_btnRegresarActionPerformed
