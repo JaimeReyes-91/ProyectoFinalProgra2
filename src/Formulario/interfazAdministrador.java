@@ -1,16 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package Formulario;
 
 import java.sql.SQLException;
 import proyectofinal.Login;
 
-/**
- *
- * @author Coloc
- */
+
 public class interfazAdministrador extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(interfazAdministrador.class.getName());
@@ -212,7 +206,8 @@ public class interfazAdministrador extends javax.swing.JFrame {
     }//GEN-LAST:event_btnProductoActionPerformed
 
     private void btnClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteActionPerformed
-    new Cliente().setVisible(true); 
+    new Cliente("administrador").setVisible(true); 
+    this.dispose();
     }//GEN-LAST:event_btnClienteActionPerformed
 
     private void btnUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuariosActionPerformed

@@ -6,19 +6,15 @@ package Formulario;
 
 import proyectofinal.Login;
 
-/**
- *
- * @author Coloc
- */
+
 public class interfazMeseroCajero extends javax.swing.JFrame {
-    
+   
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(interfazMeseroCajero.class.getName());
 
-    /**
-     * Creates new form interfazMesero
-     */
+    
     public interfazMeseroCajero() {
         initComponents();
+
     }
 
     /**
@@ -137,8 +133,8 @@ public class interfazMeseroCajero extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPedidoActionPerformed
 
     private void btnClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteActionPerformed
-    new Cliente().setVisible(true);
-    interfazMeseroCajero.this.dispose();// TODO add your handling code here:
+    new Cliente("mesero/cajero").setVisible(true);
+    this.dispose();// TODO add your handling code here:
     }//GEN-LAST:event_btnClienteActionPerformed
 
     private void btnFacturacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFacturacionActionPerformed
