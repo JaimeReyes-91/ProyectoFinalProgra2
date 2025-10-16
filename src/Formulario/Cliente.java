@@ -422,12 +422,18 @@ public class Cliente extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+<<<<<<< HEAD
     if ("administrador".equals(origen)){
         new interfazAdministrador().setVisible(true);
     } else if ("mesero/cajero".equals(origen)){
         new interfazMeseroCajero().setVisible(true);
     }this.dispose();
     
+=======
+   new interfazMeseroCajero().setVisible(true);
+    Cliente.this.dispose();
+    // TODO add your handling code here:
+>>>>>>> ramon
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     /**
