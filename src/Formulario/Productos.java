@@ -58,7 +58,7 @@ public class Productos extends javax.swing.JFrame {
         txtPrecio = new javax.swing.JTextField();
         txtStock = new javax.swing.JTextField();
         cmbCategoria = new javax.swing.JComboBox<>();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cmbDisponibilidad = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         btnAlta = new javax.swing.JButton();
         btnActualizar = new javax.swing.JButton();
@@ -86,8 +86,18 @@ public class Productos extends javax.swing.JFrame {
         jLabel7.setText("Stock");
 
         cmbCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "bebidas", "entradas", "platos_principales", "postres", " " }));
+        cmbCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbCategoriaActionPerformed(evt);
+            }
+        });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "disponible", "no disponible" }));
+        cmbDisponibilidad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "disponible", "no disponible" }));
+        cmbDisponibilidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbDisponibilidadActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -112,7 +122,7 @@ public class Productos extends javax.swing.JFrame {
                             .addComponent(txtPrecio)
                             .addComponent(txtStock)
                             .addComponent(cmbCategoria, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(cmbDisponibilidad, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -140,7 +150,7 @@ public class Productos extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cmbDisponibilidad, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
@@ -225,133 +235,143 @@ public class Productos extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
+        
         try{
-            String nombreProveedor = txtNombre.getText();
-            String nit = txtCategoria.getText();
-            String nombreContacto = txtPrecio.getText();
-            String direccion = txtDisponibilidad.getText();
-            String telefonoEmpresa = txtStock.getText();
-            String telefonoContacto = txtTelefonoContacto.getText();
-            int proveedor_id = Integer.parseInt(txtId.getText());
+        
+        int producto_id = Integer.parseInt(txtId.getText());
+        String nombre_producto = txtNombre.getText();
+        String categoriaSeleccionada = cmbCategoria.getSelectedItem().toString();
+        double precio = Double.parseDouble(txtPrecio.getText());
+        String disponibilidadSeleccionada = cmbDisponibilidad.getSelectedItem().toString();
+        int stock = Integer.parseInt(txtStock.getText());
 
-            String qry = "UPDATE public.proveedores SET nombre_proveedor = ?, nit = ?, nombre_contacto = ?, direccion = ?, telefono_empresa = ?, telefono_contacto = ?  WHERE proveedor_id = ?";
-            PreparedStatement ps = con.prepareStatement(qry);
-            ps.setString(1, nombreProveedor);
-            ps.setString(2, nit);
-            ps.setString(3, nombreContacto);
-            ps.setString(4, direccion);
-            ps.setString(5, telefonoEmpresa);
-            ps.setString(6, telefonoContacto);
-            ps.setInt(7, proveedor_id);
-            
-            
-            int filasActualizadas = ps.executeUpdate();
-            
-            if (filasActualizadas > 0){
-                JOptionPane.showMessageDialog(null, "Registro actualizado correctamente.");
-            }else {
-                JOptionPane.showMessageDialog(null, "No se encontró un proveedor con el ID " + proveedor_id);
-            }
-            ps.close();
-            
-        }catch(SQLException e){
-            e.getMessage();
-        }
+    // Consulta SQL para actualizar la tabla productos
+    String qry = "UPDATE public.productos " +
+                 "SET nombre_producto = ?, categoria_id = ?, precio = ?, disponibilidad = ?, stock = ? " +
+                 "WHERE producto_id = ?";
+
+    PreparedStatement ps = con.prepareStatement(qry);
+    ps.setString(1, nombre_producto);
+    ps.setString(2, categoriaSeleccionada);
+    ps.setDouble(3, precio);
+    ps.setString(4, disponibilidadSeleccionada);
+    ps.setInt(5, stock);
+    ps.setInt(6, producto_id);
+
+    int filasActualizadas = ps.executeUpdate();
+
+    if (filasActualizadas > 0) {
+        JOptionPane.showMessageDialog(null, "Producto actualizado correctamente.");
+    } else {
+        JOptionPane.showMessageDialog(null, "No se encontró un producto con el ID " + producto_id);
+    }
+
+    ps.close();
+
+} catch (NumberFormatException nfe) {
+    JOptionPane.showMessageDialog(null, "Verifica que ID, categoría, precio y stock sean números válidos.");
+} catch (SQLException e) {
+    JOptionPane.showMessageDialog(null, "Error al actualizar: " + e.getMessage());
+}
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarActionPerformed
         try{ 
             int id = Integer.parseInt(txtId.getText().trim());
-            String qry = "SELECT * FROM public.proveedores WHERE proveedor_id = ?";
-            
-            try(PreparedStatement ps = con.prepareStatement(qry)){
-                ps.setInt(1, id);
+
+    String qry = "SELECT * FROM public.productos WHERE producto_id = ?";
+    
+    try (PreparedStatement ps = con.prepareStatement(qry)) {
+        ps.setInt(1, id);
+        
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                // Obtener los valores de la base de datos
+                String nombreProducto = rs.getString("nombre_producto");
+                int categoriaId = rs.getInt("categoria_id");
+                double precio = rs.getDouble("precio");
+                String disponibilidad = rs.getString("disponibilidad");
+                int stock = rs.getInt("stock");
                 
-                try (ResultSet rs = ps.executeQuery()){
-                    if (rs.next()){
-                        
-                        String nombreProveedor = rs.getString("nombre_proveedor");
-                        String nit = rs.getString("nit");
-                        String nombreContacto = rs.getString("nombre_contacto");
-                        String direccion = rs.getString("direccion");
-                        String telefonoEmpresa = rs.getString("telefono_empresa");
-                        String telefonoContacto = rs.getString("telefono_contacto");
-                        
-                        txtNombre.setText(nombreProveedor);
-                        txtCategoria.setText(nit);
-                        txtPrecio.setText(nombreContacto);                      
-                        txtDisponibilidad.setText(direccion);
-                        txtStock.setText(telefonoEmpresa);
-                        txtTelefonoContacto.setText(telefonoContacto);
-                       
-                        
-                        JOptionPane.showMessageDialog(this, "Registro encontrado: " + nombreProveedor );
-                        
-                    }else{
-                        JOptionPane.showMessageDialog(null, "No se encontró el Proveedor con ID: " + id);
-                    }
-                }
+                // Asignar valores a los JTextFields
+                txtNombre.setText(nombreProducto);
+                cmbCategoria.setSelectedItem(String.valueOf(categoriaId));
+                txtPrecio.setText(String.valueOf(precio));
+                cmbDisponibilidad.setSelectedItem(disponibilidad);
+                txtStock.setText(String.valueOf(stock));
+                
+                JOptionPane.showMessageDialog(this, "Producto encontrado: " + nombreProducto);
+            } else {
+                JOptionPane.showMessageDialog(null, "No se encontró el Producto con ID: " + id);
             }
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e.getMessage());
         }
+    }
+} catch (NumberFormatException nfe) {
+    JOptionPane.showMessageDialog(null, "Por favor ingresa un ID válido.");
+} catch (SQLException e) {
+    JOptionPane.showMessageDialog(null, "Error al buscar producto: " + e.getMessage());
+}
     }//GEN-LAST:event_btnConsultarActionPerformed
 
     private void btnAltaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAltaActionPerformed
     try{
-            String nombreProveedor = txtNombre.getText();
-            String nit = txtCategoria.getText();
-            String nombreContacto = txtPrecio.getText();
-            String direccion = txtDisponibilidad.getText();
-            String telefonoEmpresa = txtStock.getText();
-            String telefonoContacto = txtTelefonoContacto.getText();
+            String nombreProducto = txtNombre.getText();
+            String categoriaSeleccionada = cmbCategoria.getSelectedItem().toString();
+            String precio = txtPrecio.getText();
+            String disponibilidadSeleccionada = cmbDisponibilidad.getSelectedItem().toString();
+            String stock = txtStock.getText();
             
-            String qry = "INSERT INTO public.proveedores(nombre_proveedor, nit, nombre_contacto, direccion, telefono_empresa, telefono_contacto)" + " values(?,?,?,?,?,?)";
+    String qry = "INSERT INTO public.productos(nombre_producto, categoria_id, precio, disponibilidad, stock)" + " VALUES(?,?,?,?,?)";
             
-            PreparedStatement ps = con.prepareStatement (qry);
-            ps.setString(1, nombreProveedor);
-            ps.setString(2, nit);
-            ps.setString(3, nombreContacto);
-            ps.setString(4, direccion);
-            ps.setString(5, telefonoEmpresa);
-            ps.setString(6, telefonoContacto);
+    PreparedStatement ps = con.prepareStatement(qry);
+    ps.setString(1, nombreProducto);
+    ps.setString(2, categoriaSeleccionada);
+    ps.setDouble(3, Double.parseDouble(precio));
+    ps.setString(4, disponibilidadSeleccionada);
+    ps.setInt(5, Integer.parseInt(stock));
             
-            int filasInsertadas = ps.executeUpdate();
+    int filasInsertadas = ps.executeUpdate();
             
-            if (filasInsertadas > 0){
-                JOptionPane.showMessageDialog(null, "El registro se ha realizado con exito.");
-            }else {
-                JOptionPane.showMessageDialog(null, "No se ha podido insertar el registro.");
-            }
+    if (filasInsertadas > 0){
+        JOptionPane.showMessageDialog(null, "El registro se ha realizado con éxito.");
+    } else {
+        JOptionPane.showMessageDialog(null, "No se ha podido insertar el registro.");
+    }
                     
-        }catch (SQLException e){
-            e.getMessage();
-        }
+}catch (SQLException e){
+    JOptionPane.showMessageDialog(null, "Error al insertar: " + e.getMessage());
+}
     }//GEN-LAST:event_btnAltaActionPerformed
 
     private void btnBajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBajaActionPerformed
         try {
         String id = txtId.getText();
         
-        String qry = "DELETE FROM public.proveedores WHERE proveedor_id = ?";
-        PreparedStatement ps = con.prepareStatement(qry);
-        ps.setInt(1, Integer.parseInt(id));
+    String qry = "DELETE FROM public.productos WHERE producto_id = ?";
+    PreparedStatement ps = con.prepareStatement(qry);
+    ps.setInt(1, Integer.parseInt(id));
         
-        int filasEliminadas = ps.executeUpdate();
+    int filasEliminadas = ps.executeUpdate();
         
-        if (filasEliminadas > 0){
-            JOptionPane.showMessageDialog(null, "Proveedor eliminado correctamente.");
-            
-        }else{
-            JOptionPane.showMessageDialog(null, "No se encontró un Proveedor con ID: "+id);
-           
-        }
-    }catch (NumberFormatException e){
-        JOptionPane.showMessageDialog(null, "El ID debe ser un número válido");
-    }catch (SQLException e){
-        e.getMessage();
+    if (filasEliminadas > 0){
+        JOptionPane.showMessageDialog(null, "Producto eliminado correctamente.");
+    } else {
+        JOptionPane.showMessageDialog(null, "No se encontró un Producto con ID: " + id);
     }
+}catch (NumberFormatException e){
+    JOptionPane.showMessageDialog(null, "El ID debe ser un número válido");
+}catch (SQLException e){
+    e.getMessage();
+}
     }//GEN-LAST:event_btnBajaActionPerformed
+
+    private void cmbCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCategoriaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbCategoriaActionPerformed
+
+    private void cmbDisponibilidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbDisponibilidadActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbDisponibilidadActionPerformed
 
     /**
      * @param args the command line arguments
@@ -384,7 +404,7 @@ public class Productos extends javax.swing.JFrame {
     private javax.swing.JButton btnBaja;
     private javax.swing.JButton btnConsultar;
     private javax.swing.JComboBox<String> cmbCategoria;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> cmbDisponibilidad;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
