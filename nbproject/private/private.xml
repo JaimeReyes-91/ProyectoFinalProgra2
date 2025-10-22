@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+<<<<<<< HEAD
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/dinae/OneDrive/Documentos/NetBeansProjects/ProyectoFinal/src/proyectofinal/Main.java</file>
@@ -9,4 +10,29 @@
             <file>file:/C:/Users/dinae/OneDrive/Documentos/NetBeansProjects/ProyectoFinal/src/Formulario/Cliente.java</file>
         </group>
     </open-files>
+=======
+<<<<<<< HEAD
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/Users/Coloc/OneDrive/Escritorio/Proyecto%20Progra%20II/ProyectoFinalProgra2/src/Formulario/interfazAdministrador.java</file>
+            <file>file:/C:/Users/Coloc/OneDrive/Escritorio/Proyecto%20Progra%20II/ProyectoFinalProgra2/src/Formulario/Cliente.java</file>
+<<<<<<< HEAD
+            <file>file:/C:/Users/Coloc/OneDrive/Escritorio/Proyecto%20Progra%20II/ProyectoFinalProgra2/src/Conexion/db_config.properties</file>
+=======
+            <file>file:/C:/Users/Coloc/OneDrive/Escritorio/Proyecto%20Progra%20II/ProyectoFinalProgra2/src/Formulario/interfazMeseroCajero.java</file>
+>>>>>>> ramon
+        </group>
+    </open-files>
+=======
+<<<<<<< HEAD
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/Users/Gerardo/OneDrive%20-%20Universidad%20Mariano%20Gálvez/Escritorio/Proyecto%20Progra%20II/ProyectoFinalProgra2/src/Conexion/Conexion.java</file>
+            <file>file:/C:/Users/Gerardo/OneDrive%20-%20Universidad%20Mariano%20Gálvez/Escritorio/Proyecto%20Progra%20II/ProyectoFinalProgra2/src/Formulario/Empleados.java</file>
+        </group>
+    </open-files>
+=======
+>>>>>>> 0f7b52672c9ba73ef390317ef33871440bebe696
+>>>>>>> 202a4db8bd7b371c16bb7d7d299685bae06a1ef1
+>>>>>>> 4e63c82c47aeb9fac4d6993801591066a4b853b4
 </project-private>
