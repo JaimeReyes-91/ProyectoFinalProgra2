@@ -17,8 +17,16 @@ import javax.swing.table.DefaultTableModel;
 import java.text.SimpleDateFormat;
 import javax.swing.text.DateFormatter;
 
+<<<<<<< HEAD
 
 
+=======
+//ramon
+/**
+ *
+ * @author dinae
+ */
+>>>>>>> ramon
 public class Cliente extends javax.swing.JFrame {
     Conexion conexionPostgres = new Conexion();
     Connection con;
