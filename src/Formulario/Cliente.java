@@ -320,11 +320,14 @@ public class Cliente extends javax.swing.JFrame {
                         txtCorreo.setText(correo);                      
                         txtDireccion.setText(direccion);
                         
-                        java.sql.Date fechaSQL = rs.getDate("fecha_ingreso");
+                       java.sql.Date fechaSQL = rs.getDate("fecha_ingreso");
                         if (fechaSQL != null) {
-                        txtFechaIngreso.setValue(new java.util.Date(fechaSQL.getTime()));
+                            java.util.Date fecha = new java.util.Date(fechaSQL.getTime());
+                            java.text.SimpleDateFormat formato = new java.text.SimpleDateFormat("dd/MM/yyyy");
+                            String fechaFormateada = formato.format(fecha);
+                            txtFechaIngreso.setText(fechaFormateada); // Usamos setText, no setValue
                         } else {
-                        txtFechaIngreso.setValue(null); 
+                            txtFechaIngreso.setText(""); // Campo vacío si no hay fecha
                         }
 
                         
