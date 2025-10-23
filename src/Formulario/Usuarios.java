@@ -22,7 +22,7 @@ import javax.swing.text.DateFormatter;
  *
  * @author dinae
  */
-public class Usuarios extends javax.swing.JFrame {
+public class Usuarios extends javax.swing.JInternalFrame {
     Conexion conexionPostgres = new Conexion();
     Connection con;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Usuarios.class.getName());
@@ -285,7 +285,7 @@ public class Usuarios extends javax.swing.JFrame {
                         txtNombreCompleto.setText(nombreCompleto);
                         
                                                
-                        JOptionPane.showMessageDialog(this, "Registro encontrado: " + nombreUsuario );
+                        JOptionPane.showMessageDialog(this, "Registro encontrado: " + nombreCompleto );
                         
                     }else{
                         JOptionPane.showMessageDialog(null, "No se encontró el Usuario con el ID: " + id);

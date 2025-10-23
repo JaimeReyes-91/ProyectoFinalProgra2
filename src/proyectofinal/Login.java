@@ -61,7 +61,7 @@ public class Login extends javax.swing.JInternalFrame {
         jLabel3 = new javax.swing.JLabel();
         txtClave = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
-        btnConsultar = new javax.swing.JButton();
+        btnIniciarSesion = new javax.swing.JButton();
         btnRegistrar = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
 
@@ -79,10 +79,10 @@ public class Login extends javax.swing.JInternalFrame {
 
         jPanel2.setBackground(new java.awt.Color(255, 204, 255));
 
-        btnConsultar.setText("INICIAR SESIÓN");
-        btnConsultar.addActionListener(new java.awt.event.ActionListener() {
+        btnIniciarSesion.setText("INICIAR SESIÓN");
+        btnIniciarSesion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnConsultarActionPerformed(evt);
+                btnIniciarSesionActionPerformed(evt);
             }
         });
 
@@ -107,7 +107,7 @@ public class Login extends javax.swing.JInternalFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(54, 54, 54)
-                .addComponent(btnConsultar)
+                .addComponent(btnIniciarSesion)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnSalir))
         );
@@ -115,7 +115,7 @@ public class Login extends javax.swing.JInternalFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap(20, Short.MAX_VALUE)
-                .addComponent(btnConsultar)
+                .addComponent(btnIniciarSesion)
                 .addGap(17, 17, 17))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -176,7 +176,7 @@ public class Login extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarActionPerformed
+    private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
         try{ 
             int id = Integer.parseInt(txtUsuario.getText().trim());
             String qry = "SELECT * FROM public.usuarios WHERE usuario_id = ?";
@@ -201,7 +201,7 @@ public class Login extends javax.swing.JInternalFrame {
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
-    }//GEN-LAST:event_btnConsultarActionPerformed
+    }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // TODO add your handling code here:
@@ -240,7 +240,7 @@ public class Login extends javax.swing.JInternalFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnConsultar;
+    private javax.swing.JButton btnIniciarSesion;
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JButton btnSalir;
     private javax.swing.JLabel jLabel1;
