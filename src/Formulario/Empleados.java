@@ -20,7 +20,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-public class Empleados extends javax.swing.JFrame {
+public class Empleados extends javax.swing.JInternalFrame {
     Conexion conexionPostgres = new Conexion();
     Connection con;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Empleados.class.getName());
