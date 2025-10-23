@@ -35,7 +35,7 @@ import java.math.BigDecimal;
  * @author Coloc
  */
 public class PedidosyFacturacion extends javax.swing.JFrame {
-    Conexion conexionPostgres = new Conexion();
+    Conexion ConexionPostgres = new Conexion();
     Connection con;
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PedidosyFacturacion.class.getName());
@@ -45,8 +45,9 @@ public class PedidosyFacturacion extends javax.swing.JFrame {
      */
     private DefaultTableModel modeloTabla; 
     
-    public PedidosyFacturacion() {
+    public PedidosyFacturacion() throws SQLException {
         initComponents();
+        con = ConexionPostgres.getConexion();
         inicializarTablaPedido();
     }
     
@@ -61,7 +62,7 @@ public class PedidosyFacturacion extends javax.swing.JFrame {
         
         // 2. Crear el modelo con 0 filas (empieza vacío)
         modeloTabla = new DefaultTableModel(columnas, 0) {
-            // Esto asegura que las celdas no puedan ser editadas directamente (solo la cantidad, si quieres)
+            // Esto asegura que las celdas no puedan ser editadas directamente (solo la cantidad, si queres)
             @Override
             public boolean isCellEditable(int row, int column) {
                 return column == 2; // Permitir edición solo en la columna "Cantidad" (índice 2)
@@ -310,6 +311,12 @@ public class PedidosyFacturacion extends javax.swing.JFrame {
         e.getMessage();
         JOptionPane.showMessageDialog(this, "La cantidad debe ser un número entero positivo" + "Error de cantidad" + e);
     }
+    
+        try {
+            llenartablaPedidos();
+        } catch (SQLException ex) {
+            System.getLogger(PedidosyFacturacion.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
 
     }//GEN-LAST:event_btnAnadirActionPerformed
 
@@ -444,6 +451,19 @@ public class PedidosyFacturacion extends javax.swing.JFrame {
     
     return importe;
 }
+    
+    public void llenartablaPedidos() throws SQLException{
+    
+        Object[] fila ={
+            getIdProducto(),
+            getnombreProducto(),
+            getCantidad(),
+            getprecioUnitario(),
+            calcularImporte()   
+        };
+        modeloTabla.addRow(fila);
+        
+    }
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -463,7 +483,13 @@ public class PedidosyFacturacion extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new PedidosyFacturacion().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> {
+            try {
+                new PedidosyFacturacion().setVisible(true);
+            } catch (SQLException ex) {
+                System.getLogger(PedidosyFacturacion.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            }
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
