@@ -240,9 +240,27 @@ public class Productos extends javax.swing.JFrame {
         
         int producto_id = Integer.parseInt(txtId.getText());
         String nombre_producto = txtNombre.getText();
+        int categoriaId = 0;
         String categoriaSeleccionada = cmbCategoria.getSelectedItem().toString();
+
+   switch (categoriaSeleccionada) {
+    case "bebidas":
+        categoriaId = 1;
+        break;
+    case "entradas":
+        categoriaId = 2;
+        break;
+    case "platos_principales":
+        categoriaId = 3;
+        break;
+    case "postres":
+        categoriaId = 4;
+        break;
+}
+
         double precio = Double.parseDouble(txtPrecio.getText());
         String disponibilidadSeleccionada = cmbDisponibilidad.getSelectedItem().toString();
+        boolean disponibilidad = disponibilidadSeleccionada.equalsIgnoreCase("disponible");
         int stock = Integer.parseInt(txtStock.getText());
 
     // Consulta SQL para actualizar la tabla productos
@@ -252,9 +270,9 @@ public class Productos extends javax.swing.JFrame {
 
     PreparedStatement ps = con.prepareStatement(qry);
     ps.setString(1, nombre_producto);
-    ps.setString(2, categoriaSeleccionada);
+    ps.setInt(2, categoriaId);
     ps.setDouble(3, precio);
-    ps.setString(4, disponibilidadSeleccionada);
+    ps.setBoolean(4, disponibilidad); 
     ps.setInt(5, stock);
     ps.setInt(6, producto_id);
 
@@ -290,14 +308,14 @@ public class Productos extends javax.swing.JFrame {
                 String nombreProducto = rs.getString("nombre_producto");
                 int categoriaId = rs.getInt("categoria_id");
                 double precio = rs.getDouble("precio");
-                String disponibilidad = rs.getString("disponibilidad");
+                boolean disponibilidad = rs.getBoolean("disponibilidad");
                 int stock = rs.getInt("stock");
                 
                 // Asignar valores a los JTextFields
                 txtNombre.setText(nombreProducto);
                 cmbCategoria.setSelectedItem(String.valueOf(categoriaId));
                 txtPrecio.setText(String.valueOf(precio));
-                cmbDisponibilidad.setSelectedItem(disponibilidad);
+                cmbDisponibilidad.setSelectedItem(disponibilidad ? "disponible" : "no disponible");
                 txtStock.setText(String.valueOf(stock));
                 
                 JOptionPane.showMessageDialog(this, "Producto encontrado: " + nombreProducto);
@@ -319,15 +337,31 @@ public class Productos extends javax.swing.JFrame {
             String categoriaSeleccionada = cmbCategoria.getSelectedItem().toString();
             String precio = txtPrecio.getText();
             String disponibilidadSeleccionada = cmbDisponibilidad.getSelectedItem().toString();
+            boolean disponibilidad = disponibilidadSeleccionada.equalsIgnoreCase("disponible");
             String stock = txtStock.getText();
+            int categoriaId = 0;
+switch (categoriaSeleccionada) {
+    case "bebidas":
+        categoriaId = 1;
+        break;
+    case "entradas":
+        categoriaId = 2;
+        break;
+    case "platos_principales":
+        categoriaId = 3;
+        break;
+    case "postres":
+        categoriaId = 4;
+        break;
+}
             
     String qry = "INSERT INTO public.productos(nombre_producto, categoria_id, precio, disponibilidad, stock)" + " VALUES(?,?,?,?,?)";
             
     PreparedStatement ps = con.prepareStatement(qry);
     ps.setString(1, nombreProducto);
-    ps.setString(2, categoriaSeleccionada);
+    ps.setInt(2, categoriaId);
     ps.setDouble(3, Double.parseDouble(precio));
-    ps.setString(4, disponibilidadSeleccionada);
+    ps.setBoolean(4, disponibilidad);
     ps.setInt(5, Integer.parseInt(stock));
             
     int filasInsertadas = ps.executeUpdate();
