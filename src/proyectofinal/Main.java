@@ -1,8 +1,10 @@
 
 package proyectofinal;
-
+import formulario.*;
 import javax.swing.JOptionPane;
 import Conexion.Conexion;
+import Formulario.Empleados;
+import Formulario.Productos;
 import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.Statement;
@@ -56,35 +58,35 @@ public class Main extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         escritorio = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        Inicio = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
-        jMenuItem5 = new javax.swing.JMenuItem();
-        jMenuItem6 = new javax.swing.JMenuItem();
-        jMenuItem7 = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
+        MenuArchivo = new javax.swing.JMenu();
+        ItemInicio = new javax.swing.JMenuItem();
+        ItemCerrarSesion = new javax.swing.JMenuItem();
+        ItemSalir = new javax.swing.JMenuItem();
+        MenuGestion = new javax.swing.JMenu();
+        ItemEmpleados = new javax.swing.JMenuItem();
+        ItemProductos = new javax.swing.JMenuItem();
+        ItemCategorias = new javax.swing.JMenuItem();
+        ItemProveedores = new javax.swing.JMenuItem();
+        ItemClientes = new javax.swing.JMenuItem();
+        MenuPedidos = new javax.swing.JMenu();
         jMenuItem8 = new javax.swing.JMenuItem();
         jMenuItem9 = new javax.swing.JMenuItem();
         jMenuItem10 = new javax.swing.JMenuItem();
-        jMenu4 = new javax.swing.JMenu();
+        MenuUsuarios = new javax.swing.JMenu();
         jMenuItem11 = new javax.swing.JMenuItem();
         jMenuItem12 = new javax.swing.JMenuItem();
         jMenuItem13 = new javax.swing.JMenuItem();
         jMenuItem14 = new javax.swing.JMenuItem();
-        jMenu5 = new javax.swing.JMenu();
+        MenuReportes = new javax.swing.JMenu();
         jMenuItem15 = new javax.swing.JMenuItem();
         jMenuItem16 = new javax.swing.JMenuItem();
         jMenuItem17 = new javax.swing.JMenuItem();
         jMenuItem18 = new javax.swing.JMenuItem();
-        jMenu8 = new javax.swing.JMenu();
+        MenuConfiguracion = new javax.swing.JMenu();
         jMenuItem19 = new javax.swing.JMenuItem();
         jMenuItem20 = new javax.swing.JMenuItem();
         jMenuItem21 = new javax.swing.JMenuItem();
-        jMenu9 = new javax.swing.JMenu();
+        MenuAyuda = new javax.swing.JMenu();
         jMenuItem22 = new javax.swing.JMenuItem();
         jMenuItem23 = new javax.swing.JMenuItem();
         jMenuItem24 = new javax.swing.JMenuItem();
@@ -99,129 +101,151 @@ public class Main extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        escritorio.setBackground(new java.awt.Color(204, 204, 255));
+        escritorio.setBackground(java.awt.SystemColor.activeCaption);
 
         javax.swing.GroupLayout escritorioLayout = new javax.swing.GroupLayout(escritorio);
         escritorio.setLayout(escritorioLayout);
         escritorioLayout.setHorizontalGroup(
             escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 498, Short.MAX_VALUE)
+            .addGap(0, 695, Short.MAX_VALUE)
         );
         escritorioLayout.setVerticalGroup(
             escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 277, Short.MAX_VALUE)
+            .addGap(0, 408, Short.MAX_VALUE)
         );
 
         jMenuBar1.setBackground(new java.awt.Color(204, 204, 255));
+        jMenuBar1.setMaximumSize(new java.awt.Dimension(600, 32768));
+        jMenuBar1.setPreferredSize(new java.awt.Dimension(436, 35));
 
-        jMenu1.setText("Archivo");
+        MenuArchivo.setText("Archivo");
+        MenuArchivo.setMinimumSize(new java.awt.Dimension(75, 30));
 
-        Inicio.setText("Inicio");
-        Inicio.addActionListener(new java.awt.event.ActionListener() {
+        ItemInicio.setText("Inicio");
+        ItemInicio.setPreferredSize(new java.awt.Dimension(77, 30));
+        ItemInicio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                InicioActionPerformed(evt);
+                ItemInicioActionPerformed(evt);
             }
         });
-        jMenu1.add(Inicio);
+        MenuArchivo.add(ItemInicio);
 
-        jMenuItem1.setText("Cerrar sesión");
-        jMenu1.add(jMenuItem1);
+        ItemCerrarSesion.setText("Cerrar sesión");
+        ItemCerrarSesion.setPreferredSize(new java.awt.Dimension(116, 30));
+        MenuArchivo.add(ItemCerrarSesion);
 
-        jMenuItem2.setText("Salir");
-        jMenu1.add(jMenuItem2);
+        ItemSalir.setText("Salir");
+        ItemSalir.setPreferredSize(new java.awt.Dimension(72, 30));
+        MenuArchivo.add(ItemSalir);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(MenuArchivo);
 
-        jMenu2.setText("Gestión");
+        MenuGestion.setText("Gestión");
+        MenuGestion.setMinimumSize(new java.awt.Dimension(75, 30));
 
-        jMenuItem3.setText("Empleados");
-        jMenu2.add(jMenuItem3);
+        ItemEmpleados.setText("Empleados");
+        ItemEmpleados.setPreferredSize(new java.awt.Dimension(106, 30));
+        ItemEmpleados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ItemEmpleadosActionPerformed(evt);
+            }
+        });
+        MenuGestion.add(ItemEmpleados);
 
-        jMenuItem4.setText("Productos");
-        jMenu2.add(jMenuItem4);
+        ItemProductos.setText("Productos");
+        ItemProductos.setPreferredSize(new java.awt.Dimension(102, 30));
+        ItemProductos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ItemProductosActionPerformed(evt);
+            }
+        });
+        MenuGestion.add(ItemProductos);
 
-        jMenuItem5.setText("Categorías");
-        jMenu2.add(jMenuItem5);
+        ItemCategorias.setText("Categorías");
+        ItemCategorias.setPreferredSize(new java.awt.Dimension(104, 30));
+        MenuGestion.add(ItemCategorias);
 
-        jMenuItem6.setText("Proveedores");
-        jMenu2.add(jMenuItem6);
+        ItemProveedores.setText("Proveedores");
+        ItemProveedores.setPreferredSize(new java.awt.Dimension(113, 30));
+        MenuGestion.add(ItemProveedores);
 
-        jMenuItem7.setText("Clientes");
-        jMenu2.add(jMenuItem7);
+        ItemClientes.setText("Clientes");
+        ItemClientes.setPreferredSize(new java.awt.Dimension(90, 30));
+        MenuGestion.add(ItemClientes);
 
-        jMenuBar1.add(jMenu2);
+        jMenuBar1.add(MenuGestion);
 
-        jMenu3.setMnemonic('1');
-        jMenu3.setText("Pedidos");
+        MenuPedidos.setMnemonic('1');
+        MenuPedidos.setText("Pedidos");
 
         jMenuItem8.setText("Nuevo pedido");
-        jMenu3.add(jMenuItem8);
+        MenuPedidos.add(jMenuItem8);
 
         jMenuItem9.setText("Ver pedidos");
-        jMenu3.add(jMenuItem9);
+        MenuPedidos.add(jMenuItem9);
 
         jMenuItem10.setText("Generar factura PDF");
-        jMenu3.add(jMenuItem10);
+        MenuPedidos.add(jMenuItem10);
 
-        jMenuBar1.add(jMenu3);
+        jMenuBar1.add(MenuPedidos);
 
-        jMenu4.setText("Usuarios");
+        MenuUsuarios.setText("Usuarios");
 
         jMenuItem11.setText("Registrar usuarios");
-        jMenu4.add(jMenuItem11);
+        MenuUsuarios.add(jMenuItem11);
 
         jMenuItem12.setText("Ver usuarios");
-        jMenu4.add(jMenuItem12);
+        MenuUsuarios.add(jMenuItem12);
 
         jMenuItem13.setText("Editar usuarios");
-        jMenu4.add(jMenuItem13);
+        MenuUsuarios.add(jMenuItem13);
 
         jMenuItem14.setText("Eliminar usuarios");
-        jMenu4.add(jMenuItem14);
+        MenuUsuarios.add(jMenuItem14);
 
-        jMenuBar1.add(jMenu4);
+        jMenuBar1.add(MenuUsuarios);
 
-        jMenu5.setText("Reportes");
+        MenuReportes.setText("Reportes");
 
         jMenuItem15.setText("Reporte de ventas");
-        jMenu5.add(jMenuItem15);
+        MenuReportes.add(jMenuItem15);
 
         jMenuItem16.setText("Productos más vendidos");
-        jMenu5.add(jMenuItem16);
+        MenuReportes.add(jMenuItem16);
 
         jMenuItem17.setText("Clientes frecuentes");
-        jMenu5.add(jMenuItem17);
+        MenuReportes.add(jMenuItem17);
 
         jMenuItem18.setText("Exportar reporte a PDF");
-        jMenu5.add(jMenuItem18);
+        MenuReportes.add(jMenuItem18);
 
-        jMenuBar1.add(jMenu5);
+        jMenuBar1.add(MenuReportes);
 
-        jMenu8.setText("Configuración");
+        MenuConfiguracion.setText("Configuración");
 
         jMenuItem19.setText("Configuración DB");
-        jMenu8.add(jMenuItem19);
+        MenuConfiguracion.add(jMenuItem19);
 
         jMenuItem20.setText("Información del restaurante");
-        jMenu8.add(jMenuItem20);
+        MenuConfiguracion.add(jMenuItem20);
 
         jMenuItem21.setText("Preferencias del sistema");
-        jMenu8.add(jMenuItem21);
+        MenuConfiguracion.add(jMenuItem21);
 
-        jMenuBar1.add(jMenu8);
+        jMenuBar1.add(MenuConfiguracion);
 
-        jMenu9.setText("Ayuda");
+        MenuAyuda.setText("Ayuda");
 
         jMenuItem22.setText("Manual de usuario");
-        jMenu9.add(jMenuItem22);
+        MenuAyuda.add(jMenuItem22);
 
         jMenuItem23.setText("Acerca del sistema");
-        jMenu9.add(jMenuItem23);
+        MenuAyuda.add(jMenuItem23);
 
         jMenuItem24.setText("Soporte");
-        jMenu9.add(jMenuItem24);
+        MenuAyuda.add(jMenuItem24);
 
-        jMenuBar1.add(jMenu9);
+        jMenuBar1.add(MenuAyuda);
 
         setJMenuBar(jMenuBar1);
 
@@ -233,17 +257,31 @@ public class Main extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(escritorio, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(escritorio)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void InicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InicioActionPerformed
-    Login login = new Login();     
-    escritorio.add(login);             
-    login.setVisible(true);
-    }//GEN-LAST:event_InicioActionPerformed
+    private void ItemInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ItemInicioActionPerformed
+        Login login = new Login();
+        escritorio.add(login);
+        login.setVisible(true);
+    }//GEN-LAST:event_ItemInicioActionPerformed
+
+    private void ItemEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ItemEmpleadosActionPerformed
+        Empleados empleado = new Empleados();
+        escritorio.add(empleado);
+        empleado.setVisible(true);
+    }//GEN-LAST:event_ItemEmpleadosActionPerformed
+
+    private void ItemProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ItemProductosActionPerformed
+        Productos producto = new Productos();
+        escritorio.add(producto);
+        producto.setVisible(true);
+    }//GEN-LAST:event_ItemProductosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -254,20 +292,26 @@ public class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem Inicio;
+    private javax.swing.JMenuItem ItemCategorias;
+    private javax.swing.JMenuItem ItemCerrarSesion;
+    private javax.swing.JMenuItem ItemClientes;
+    private javax.swing.JMenuItem ItemEmpleados;
+    private javax.swing.JMenuItem ItemInicio;
+    private javax.swing.JMenuItem ItemProductos;
+    private javax.swing.JMenuItem ItemProveedores;
+    private javax.swing.JMenuItem ItemSalir;
+    private javax.swing.JMenu MenuArchivo;
+    private javax.swing.JMenu MenuAyuda;
+    private javax.swing.JMenu MenuConfiguracion;
+    private javax.swing.JMenu MenuGestion;
+    private javax.swing.JMenu MenuPedidos;
+    private javax.swing.JMenu MenuReportes;
+    private javax.swing.JMenu MenuUsuarios;
     private javax.swing.JDesktopPane escritorio;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenu jMenu6;
     private javax.swing.JMenu jMenu7;
-    private javax.swing.JMenu jMenu8;
-    private javax.swing.JMenu jMenu9;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JMenuItem jMenuItem11;
     private javax.swing.JMenuItem jMenuItem12;
@@ -278,17 +322,11 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem17;
     private javax.swing.JMenuItem jMenuItem18;
     private javax.swing.JMenuItem jMenuItem19;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem20;
     private javax.swing.JMenuItem jMenuItem21;
     private javax.swing.JMenuItem jMenuItem22;
     private javax.swing.JMenuItem jMenuItem23;
     private javax.swing.JMenuItem jMenuItem24;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
-    private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JTextField jTextField1;
