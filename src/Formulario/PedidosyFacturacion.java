@@ -24,6 +24,17 @@ import javax.swing.table.DefaultTableModel;
 import java.text.SimpleDateFormat;
 import javax.swing.text.DateFormatter;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode; // Necesario para redondear a dos decimales
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JOptionPane;
+
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableModel;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 //los que yo puse
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
@@ -49,6 +60,7 @@ public class PedidosyFacturacion extends javax.swing.JFrame {
         initComponents();
         con = ConexionPostgres.getConexion();
         inicializarTablaPedido();
+        configurarListenerTabla();
     }
     
 
@@ -97,7 +109,6 @@ public class PedidosyFacturacion extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        lblDescuento = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         lblIva = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -114,6 +125,13 @@ public class PedidosyFacturacion extends javax.swing.JFrame {
         lblCorreo = new javax.swing.JLabel();
         btnBuscarCliente = new javax.swing.JButton();
         btnAgregarCliente = new javax.swing.JButton();
+        btnEliminarProducto = new javax.swing.JButton();
+        jLabel15 = new javax.swing.JLabel();
+        txtDescuento = new javax.swing.JTextField();
+        jLabel16 = new javax.swing.JLabel();
+        txtIdEmpleado = new javax.swing.JTextField();
+        btnComprar = new javax.swing.JButton();
+        btnCalcularDescuento = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -163,8 +181,6 @@ public class PedidosyFacturacion extends javax.swing.JFrame {
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setText("Descuento");
 
-        lblDescuento.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("IVA");
 
@@ -173,6 +189,11 @@ public class PedidosyFacturacion extends javax.swing.JFrame {
         jLabel9.setText("Método de Pago");
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Efectivo", "Tarjeta" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         jLabel10.setText("Recargo por método de pago");
 
@@ -208,6 +229,39 @@ public class PedidosyFacturacion extends javax.swing.JFrame {
             }
         });
 
+        btnEliminarProducto.setText("Eliminar Producto");
+        btnEliminarProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarProductoActionPerformed(evt);
+            }
+        });
+
+        jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel15.setText("LISTA DE COMPRAS");
+
+        txtDescuento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtDescuentoActionPerformed(evt);
+            }
+        });
+
+        jLabel16.setText("ID del empleado que atendió:");
+
+        txtIdEmpleado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIdEmpleadoActionPerformed(evt);
+            }
+        });
+
+        btnComprar.setText("Realizar Compra");
+
+        btnCalcularDescuento.setText("Calcular Descuento");
+        btnCalcularDescuento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCalcularDescuentoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -235,9 +289,7 @@ public class PedidosyFacturacion extends javax.swing.JFrame {
                                 .addGap(9, 9, 9)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lblNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(txtNit, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                    .addComponent(txtNit, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addGroup(jPanel1Layout.createSequentialGroup()
@@ -265,36 +317,51 @@ public class PedidosyFacturacion extends javax.swing.JFrame {
                                 .addComponent(btnAgregarCliente))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGap(23, 23, 23)
+                                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(jLabel10))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(lblIva, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
+                                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(txtDescuento, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
+                                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(lblsubTotalPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(lblTotalPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btnEliminarProducto))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel16)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtIdEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(23, 23, 23)
-                                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jLabel10))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(lblIva, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
-                                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(lblDescuento, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
-                                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(lblsubTotalPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(lblTotalPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap())))
+                                    .addComponent(btnComprar)
+                                    .addComponent(btnCalcularDescuento))))
+                        .addContainerGap())
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(207, 207, 207)
+                        .addComponent(jLabel15)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -318,16 +385,21 @@ public class PedidosyFacturacion extends javax.swing.JFrame {
                     .addComponent(lblCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel14))
                 .addGap(58, 58, 58)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
-                    .addComponent(cmbProductos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAnadir)
-                    .addComponent(txtCantidad))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtCantidad)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel9)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2)
+                        .addComponent(cmbProductos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnAnadir)))
+                .addGap(26, 26, 26)
+                .addComponent(jLabel15)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnEliminarProducto)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -335,7 +407,9 @@ public class PedidosyFacturacion extends javax.swing.JFrame {
                             .addComponent(jLabel7)
                             .addComponent(jLabel6))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                            .addComponent(txtDescuento)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
@@ -344,11 +418,18 @@ public class PedidosyFacturacion extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(lblsubTotalPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblTotalPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(lblDescuento, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblIva, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(100, 100, 100)
+                .addGap(24, 24, 24)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel16)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtIdEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnCalcularDescuento)))
+                .addGap(6, 6, 6)
                 .addComponent(jLabel3)
-                .addGap(121, 121, 121))
+                .addGap(18, 18, 18)
+                .addComponent(btnComprar)
+                .addGap(153, 153, 153))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -389,6 +470,8 @@ public class PedidosyFacturacion extends javax.swing.JFrame {
 
         try {
             llenartablaPedidos();
+            calcularYActualizarSubTotal();
+            calcularRecargoYTotales();
         } catch (SQLException ex) {
             System.getLogger(PedidosyFacturacion.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
@@ -437,6 +520,49 @@ public class PedidosyFacturacion extends javax.swing.JFrame {
     Cliente newcliente = new Cliente();
     newcliente.setVisible(true);
     }//GEN-LAST:event_btnAgregarClienteActionPerformed
+
+    private void txtDescuentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDescuentoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDescuentoActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+        calcularRecargoYTotales();
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void btnEliminarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarProductoActionPerformed
+        // TODO add your handling code here:
+        //obtener el modelo de la tabla
+        DefaultTableModel modelo = (DefaultTableModel) tblPedido.getModel();
+        
+        //obtener el índice de la fila seleccionada por el usuario
+        int filaSeleccionada = tblPedido.getSelectedRow();
+        
+        //verificar si el usuario selecciono una fila
+        if (filaSeleccionada >= 0){
+            //si la fila ee mayor o igual a 0 ssignifica que está en una posición válida, porque el conteo empieza en 0, entonces se elimina
+            modelo.removeRow(filaSeleccionada);
+            
+            //llamar a las funciones para recalcular los totales:
+            calcularYActualizarSubTotal();
+            calcularRecargoYTotales();   
+    } else{
+            //notificar al usuario si no selecciono nada:
+            JOptionPane.showMessageDialog(this, "Selecciona la fila del producto que desea eliminar", "Advertencia", JOptionPane.WARNING_MESSAGE );
+        }
+    }//GEN-LAST:event_btnEliminarProductoActionPerformed
+
+    private void txtIdEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdEmpleadoActionPerformed
+        // TODO add your handling code here:
+        //calcularRecargoYTotales();
+        //calcularYActualizarSubTotal();
+    }//GEN-LAST:event_txtIdEmpleadoActionPerformed
+
+    private void btnCalcularDescuentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcularDescuentoActionPerformed
+        // TODO add your handling code here:
+        calcularRecargoYTotales();
+        calcularYActualizarSubTotal();
+    }//GEN-LAST:event_btnCalcularDescuentoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -610,10 +736,167 @@ public class PedidosyFacturacion extends javax.swing.JFrame {
         });
     }
 
+    public void calcularYActualizarSubTotal(){
+        //1) Inicializar el acumulador en 0, con el método BigDecimal.ZERO
+        BigDecimal subTotal= BigDecimal.ZERO;
+        
+        // Obtener el modelo de la tabla (Siempre debe hacerse casting a DefaultTableModel para aparte de poder leer datos, manipularlos como insertar y eliminar)
+        DefaultTableModel modelo = (DefaultTableModel) tblPedido.getModel();
+        
+        int numFilas = modelo.getRowCount();
+        if (numFilas == 0){
+            // si no hay productos el subtotal es 0
+            lblsubTotalPedido.setText("0.00");
+            return;
+        }
+        try{
+            //2) iterar sobre todas las filas del Jtable
+            for (int i=0; i < numFilas; i++){
+                //3)Obtener el valor de la columna importe, indice 4
+            Object valorImporte = modelo.getValueAt(i, 4);
+            
+            //4) Convertir el valor a String y luego a Big Decimal 
+            BigDecimal importeFila = new BigDecimal(valorImporte.toString());
+            //5 sumar el importe de la linea al subtotal general
+            subTotal = subTotal.add(importeFila);
+            }
+            //6 redondear el subtotal a 2 decimales para mostrarlo, RoundingMode.HALF_UP es el redondeo estándar (al más cercano)
+            BigDecimal subTotalFinal = subTotal.setScale(2, RoundingMode.HALF_UP);
+            // 7 Formatear y actualizar el label de subtotal
+            lblsubTotalPedido.setText(subTotalFinal.toString());
+            
+
+  
+        }catch (NumberFormatException e){
+            JOptionPane.showMessageDialog(this, "Error de formato en el importe de la tabla. Revise la Columna de totales:" + e.getMessage(), "Error de cálculo", JOptionPane.ERROR_MESSAGE);
+            lblsubTotalPedido.setText("Error");
+        }
+    }
+public void calcularRecargoYTotales() {
+    
+    // Asumimos que calcularYActualizarSubTotal() ya ha corrido
+    // y lblsubTotalPedido tiene el valor correcto.
+    
+    // Constantes
+    final BigDecimal TASA_ADICIONAL = new BigDecimal("0.05"); // 5%
+    final BigDecimal TASA_IVA = new BigDecimal("0.12"); // Asumiendo 12% de IVA
+    
+    // 1. Obtener los valores base (con manejo de errores)
+    BigDecimal subTotal;
+    BigDecimal descuentoManual;
+    
+    try {
+        // Obtenemos SubTotal del Label
+        subTotal = new BigDecimal(lblsubTotalPedido.getText());
+        
+        // Obtenemos Descuento Manual del TextField (si está vacío, asumimos 0)
+        String descText = txtDescuento.getText().isEmpty() ? "0.00" : txtDescuento.getText();
+        descuentoManual = new BigDecimal(descText);
+        
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Error: SubTotal o Descuento Manual no es un número válido.", "Error de Datos", JOptionPane.ERROR_MESSAGE);
+        return; // Detiene el cálculo si hay error
+    }
+
+    // 2. Calcular Recargo/Descuento por Método de Pago
+    BigDecimal ajustePorPago = BigDecimal.ZERO;
+    String metodo = (String) jComboBox1.getSelectedItem();
+
+    if ("Tarjeta".equals(metodo)) {
+        // Recargo: se suma el 5% al subtotal
+        ajustePorPago = subTotal.multiply(TASA_ADICIONAL).setScale(2, RoundingMode.HALF_UP);
+    } else if ("Efectivo".equals(metodo)) {
+        // Descuento: se resta el 5% del subtotal
+        // Nota el signo negativo: el cálculo final lo restará.
+        ajustePorPago = subTotal.multiply(TASA_ADICIONAL).setScale(2, RoundingMode.HALF_UP).negate();
+    }
+    
+    // 3. Actualizar el JLabel de Recargo (jLabel8) con el valor (positivo o negativo)
+    // Usamos abs() para mostrar el valor absoluto del ajuste
+    jLabel8.setText(ajustePorPago.abs().toString()); 
+    
+    // 4. Calcular la Base Imponible, SubTotal - Descuento Manual + Ajuste por Pago
+    // Nota: ajustePorPago es negativo si es descuento.
+    BigDecimal baseImponible = subTotal.subtract(descuentoManual).add(ajustePorPago); 
+    
+    // 5. Calcular iva
+    BigDecimal iva = baseImponible.multiply(TASA_IVA).setScale(2, RoundingMode.HALF_UP);
+    lblIva.setText(iva.toString());
+    
+    // 6. Calcular total a pagar
+    BigDecimal totalFinal = baseImponible.add(iva).setScale(2, RoundingMode.HALF_UP);
+    lblTotalPedido.setText(totalFinal.toString());
+}
+
+public void configurarListenerTabla() {
+    
+    // Indices de columnas 
+    final int COL_CANTIDAD = 2; 
+    final int COL_PRECIO = 3;    // Precio unitario
+    final int COL_IMPORTE = 4;   // Importe total (Cantidad * Precio)
+    
+    DefaultTableModel modelo = (DefaultTableModel) tblPedido.getModel();
+    
+    modelo.addTableModelListener(new TableModelListener() {
+        
+        @Override
+        public void tableChanged(TableModelEvent e) {
+            
+            // 1. Verificación para asegurarse de que el cabio fue una edición de una celda
+            if (e.getType() == TableModelEvent.UPDATE) {
+                
+                int fila = e.getFirstRow();
+                int columna = e.getColumn();
+                
+                // 2. Verificación par solo actuar si la columna editada es la de CANTIDAD
+                if (columna == COL_CANTIDAD) {
+                    
+                    try {
+                        // A. Obtener los datos necesarios
+                        String strCantidad = modelo.getValueAt(fila, COL_CANTIDAD).toString();
+                        String strPrecio = modelo.getValueAt(fila, COL_PRECIO).toString();
+                        
+                        // b. Conversión a bigecimal
+                        BigDecimal cantidad = new BigDecimal(strCantidad);
+                        BigDecimal precio = new BigDecimal(strPrecio);
+                        
+                        // C. Calcular el nuevo importe de la fila
+                        BigDecimal nuevoImporte = cantidad.multiply(precio).setScale(2, RoundingMode.HALF_UP);
+                        
+                        // D. Actulizar la celda importe
+                        // Esto no dispara otro evento de TableModelEvent.UPDATE
+                        modelo.setValueAt(nuevoImporte.toString(), fila, COL_IMPORTE); 
+                        
+                        // E) Recalcular totales globales
+                        // El Subtotal, recargo, iva y total deben actualizarse con el nuevo importe
+                        calcularYActualizarSubTotal();
+                        calcularRecargoYTotales();
+                        
+                    } catch (NumberFormatException ex) {
+                        // Si el usuario introduce texto inválido en la cantidad
+                        JOptionPane.showMessageDialog(null, 
+                            "La cantidad introducida no es un número válido.", 
+                            "Error de Entrada", 
+                            JOptionPane.ERROR_MESSAGE);
+                        //Revertir la celda a 1 para evitar un cálculo erróneo
+                        modelo.setValueAt("1", fila, COL_CANTIDAD); 
+                        
+                    } catch (Exception ex) {
+                         // Manejo de mas errores
+                         JOptionPane.showMessageDialog(null, "Error al recalcular la fila: " + ex.getMessage());
+                    }
+                }
+            }
+        }
+    });
+}
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarCliente;
     private javax.swing.JButton btnAnadir;
     private javax.swing.JButton btnBuscarCliente;
+    private javax.swing.JButton btnCalcularDescuento;
+    private javax.swing.JButton btnComprar;
+    private javax.swing.JButton btnEliminarProducto;
     private javax.swing.JComboBox<String> cmbProductos;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
@@ -622,6 +905,8 @@ public class PedidosyFacturacion extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -633,7 +918,6 @@ public class PedidosyFacturacion extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblCorreo;
-    private javax.swing.JLabel lblDescuento;
     private javax.swing.JLabel lblDireccion;
     private javax.swing.JLabel lblIva;
     private javax.swing.JLabel lblNombre;
@@ -642,6 +926,8 @@ public class PedidosyFacturacion extends javax.swing.JFrame {
     private javax.swing.JLabel lblsubTotalPedido;
     private javax.swing.JTable tblPedido;
     private javax.swing.JTextField txtCantidad;
+    private javax.swing.JTextField txtDescuento;
+    private javax.swing.JTextField txtIdEmpleado;
     private javax.swing.JTextField txtNit;
     // End of variables declaration//GEN-END:variables
 }
