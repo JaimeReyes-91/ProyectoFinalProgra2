@@ -3,22 +3,33 @@ package proyectofinal;
 import javax.swing.JOptionPane;
 import Conexion.Conexion;
 import Formulario.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.io.File;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.sql.Statement;
 import java.sql.ResultSet;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import java.text.SimpleDateFormat;
+import javax.swing.JDesktopPane;
+import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.text.DateFormatter;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.swing.JRViewer;
+import net.sf.jasperreports.view.JasperViewer;
 
 
 /**
@@ -29,6 +40,44 @@ import javax.swing.text.DateFormatter;
 public class Main extends javax.swing.JFrame {
    Conexion conexionPostgres = new Conexion();
     Connection con;
+
+    private void mostrarVentana(JInternalFrame frame) {
+        escritorio.removeAll();
+        escritorio.repaint();
+        int x = (escritorio.getWidth() - frame.getWidth()) / 2;
+        int y = (escritorio.getHeight() - frame.getHeight()) / 2;
+        frame.setLocation(x, y);
+        frame.setVisible(true);
+        escritorio.add(frame);
+    }
+    
+    public class ReportUtils {
+    public static void mostrarReporte(String ruta, Connection con, JDesktopPane escritorio) {
+        try {
+            
+
+            InputStream stream = ReportUtils.class.getResourceAsStream(ruta);
+            if (stream == null) {
+                throw new IllegalArgumentException("No se encontró el reporte: " + ruta);
+            }
+
+            JasperReport report = JasperCompileManager.compileReport(stream);
+            JasperPrint print = JasperFillManager.fillReport(report, null, con);
+
+            JRViewer viewer = new JRViewer(print);
+            escritorio.removeAll();
+            escritorio.add(viewer);
+            viewer.setBounds(0, 0, escritorio.getWidth(), escritorio.getHeight());
+            escritorio.revalidate();
+            escritorio.repaint();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al generar reporte: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+}
+    
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Main.class.getName());
     
@@ -83,7 +132,7 @@ public class Main extends javax.swing.JFrame {
         menuEliminarUsuarios = new javax.swing.JMenuItem();
         MenuReportes = new javax.swing.JMenu();
         jMenuItem15 = new javax.swing.JMenuItem();
-        jMenuItem16 = new javax.swing.JMenuItem();
+        menuEmpleados = new javax.swing.JMenuItem();
         jMenuItem17 = new javax.swing.JMenuItem();
         jMenuItem18 = new javax.swing.JMenuItem();
         MenuConfiguracion = new javax.swing.JMenu();
@@ -239,8 +288,13 @@ public class Main extends javax.swing.JFrame {
         jMenuItem15.setText("Reporte de ventas");
         MenuReportes.add(jMenuItem15);
 
-        jMenuItem16.setText("Productos más vendidos");
-        MenuReportes.add(jMenuItem16);
+        menuEmpleados.setText("Empleados");
+        menuEmpleados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuEmpleadosActionPerformed(evt);
+            }
+        });
+        MenuReportes.add(menuEmpleados);
 
         jMenuItem17.setText("Clientes frecuentes");
         MenuReportes.add(jMenuItem17);
@@ -295,92 +349,40 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void ItemInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ItemInicioActionPerformed
-        escritorio.removeAll();
-        escritorio.repaint();
-        Login login = new Login();
-        escritorio.add(login);
-        int x = (escritorio.getWidth() - login.getWidth()) / 2;
-        int y = (escritorio.getHeight() - login.getHeight()) / 2;
-        login.setLocation(x, y);
-        login.setVisible(true);
+        mostrarVentana(new Login());
     }//GEN-LAST:event_ItemInicioActionPerformed
 
     private void ItemEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ItemEmpleadosActionPerformed
-        escritorio.removeAll();
-        escritorio.repaint();
-        Empleados empleado = new Empleados();
-        escritorio.add(empleado);
-        int x = (escritorio.getWidth() - empleado.getWidth()) / 2;
-        int y = (escritorio.getHeight() - empleado.getHeight()) / 2;
-        empleado.setLocation(x, y);
-        empleado.setVisible(true);
+        mostrarVentana(new Empleados());
     }//GEN-LAST:event_ItemEmpleadosActionPerformed
 
     private void ItemProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ItemProductosActionPerformed
-        escritorio.removeAll();
-        escritorio.repaint();
-        Productos producto = new Productos();
-        escritorio.add(producto);
-        int x = (escritorio.getWidth() - producto.getWidth()) / 2;
-        int y = (escritorio.getHeight() - producto.getHeight()) / 2;
-        producto.setLocation(x, y);
-        producto.setVisible(true);
+        mostrarVentana(new Productos());
     }//GEN-LAST:event_ItemProductosActionPerformed
 
     private void menuRegistrarUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRegistrarUsuariosActionPerformed
-        escritorio.removeAll();
-        escritorio.repaint();
-        Usuarios usuario = new Usuarios();
-        escritorio.add(usuario);
-        int x = (escritorio.getWidth() - usuario.getWidth()) / 2;
-        int y = (escritorio.getHeight() - usuario.getHeight()) / 2;
-        usuario.setLocation(x, y);
-        usuario.setVisible(true);
+        mostrarVentana(new Usuarios());
     }//GEN-LAST:event_menuRegistrarUsuariosActionPerformed
 
     private void menuVerUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuVerUsuariosActionPerformed
-        escritorio.removeAll();
-        escritorio.repaint();
-        Usuarios usuario = new Usuarios();
-        escritorio.add(usuario);
-        int x = (escritorio.getWidth() - usuario.getWidth()) / 2;
-        int y = (escritorio.getHeight() - usuario.getHeight()) / 2;
-        usuario.setLocation(x, y);
-        usuario.setVisible(true);
+        mostrarVentana(new Usuarios());
     }//GEN-LAST:event_menuVerUsuariosActionPerformed
 
     private void menuEditarUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEditarUsuariosActionPerformed
-        escritorio.removeAll();
-        escritorio.repaint();
-        Usuarios usuario = new Usuarios();
-        escritorio.add(usuario);
-        int x = (escritorio.getWidth() - usuario.getWidth()) / 2;
-        int y = (escritorio.getHeight() - usuario.getHeight()) / 2;
-        usuario.setLocation(x, y);
-        usuario.setVisible(true);
+        mostrarVentana(new Usuarios());
     }//GEN-LAST:event_menuEditarUsuariosActionPerformed
 
     private void menuEliminarUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEliminarUsuariosActionPerformed
-        escritorio.removeAll();
-        escritorio.repaint();
-        Usuarios usuario = new Usuarios();
-        escritorio.add(usuario);
-        int x = (escritorio.getWidth() - usuario.getWidth()) / 2;
-        int y = (escritorio.getHeight() - usuario.getHeight()) / 2;
-        usuario.setLocation(x, y);
-        usuario.setVisible(true);
+        mostrarVentana(new Usuarios());
     }//GEN-LAST:event_menuEliminarUsuariosActionPerformed
 
     private void itemNuevoPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemNuevoPedidoActionPerformed
-        escritorio.removeAll();
-        escritorio.repaint();
-        Pedidos pedido = new Pedidos();
-        escritorio.add(pedido);
-        int x = (escritorio.getWidth() - pedido.getWidth()) / 2;
-        int y = (escritorio.getHeight() - pedido.getHeight()) / 2;
-        pedido.setLocation(x, y);
-        pedido.setVisible(true);
+        mostrarVentana(new Pedidos());
     }//GEN-LAST:event_itemNuevoPedidoActionPerformed
+
+    private void menuEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEmpleadosActionPerformed
+       ReportUtils.mostrarReporte("/Reportes/jrEmpleados.jrxml", con, escritorio);
+    }//GEN-LAST:event_menuEmpleadosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -414,7 +416,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JMenuItem jMenuItem15;
-    private javax.swing.JMenuItem jMenuItem16;
     private javax.swing.JMenuItem jMenuItem17;
     private javax.swing.JMenuItem jMenuItem18;
     private javax.swing.JMenuItem jMenuItem19;
@@ -427,6 +428,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JMenuItem menuEditarUsuarios;
     private javax.swing.JMenuItem menuEliminarUsuarios;
+    private javax.swing.JMenuItem menuEmpleados;
     private javax.swing.JMenuItem menuRegistrarUsuarios;
     private javax.swing.JMenuItem menuVerUsuarios;
     // End of variables declaration//GEN-END:variables

@@ -20,7 +20,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author dinae
  */
-public class Productos extends javax.swing.JFrame {
+public class Productos extends javax.swing.JInternalFrame {
     Conexion conexionPostgres = new Conexion();
     Connection con;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Productos.class.getName());
