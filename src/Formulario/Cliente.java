@@ -20,24 +20,30 @@ import javax.swing.text.DateFormatter;
 
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8ff7f29e2263736fe01717f5be753d35af7f8c40
 //ramon
 /**
  *
  * @author dinae
  */
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 8ff7f29e2263736fe01717f5be753d35af7f8c40
 public class Cliente extends javax.swing.JFrame {
     Conexion conexionPostgres = new Conexion();
     Connection con;
-    //private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Cliente.class.getName());
-    private String origen;
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Cliente.class.getName());
+  
     public Cliente() {
        
         initComponents();
-        this.origen="administrador";
+        
         try{
             con = conexionPostgres.getConexion();
             
@@ -48,7 +54,7 @@ public class Cliente extends javax.swing.JFrame {
     }
     public Cliente(String origen){
         initComponents();
-        this.origen=origen;
+        
         try{
             con = conexionPostgres.getConexion();
             
@@ -78,12 +84,13 @@ public class Cliente extends javax.swing.JFrame {
         txtCorreo = new javax.swing.JTextField();
         txtDireccion = new javax.swing.JTextField();
         txtFechaIngreso = new javax.swing.JFormattedTextField();
+        jLabel8 = new javax.swing.JLabel();
+        txtNit = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         btnRegistrar = new javax.swing.JButton();
         btnActualizar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnConsultar = new javax.swing.JButton();
-        btnRegresar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -113,6 +120,8 @@ public class Cliente extends javax.swing.JFrame {
 
         txtFechaIngreso.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
 
+        jLabel8.setText("NIT:");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -123,11 +132,12 @@ public class Cliente extends javax.swing.JFrame {
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
                             .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -136,7 +146,8 @@ public class Cliente extends javax.swing.JFrame {
                             .addComponent(txtTelefono)
                             .addComponent(txtCorreo)
                             .addComponent(txtDireccion)
-                            .addComponent(txtFechaIngreso))
+                            .addComponent(txtFechaIngreso)
+                            .addComponent(txtNit))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -169,7 +180,11 @@ public class Cliente extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(txtFechaIngreso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(txtNit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(new java.awt.Color(255, 204, 255));
@@ -202,31 +217,19 @@ public class Cliente extends javax.swing.JFrame {
             }
         });
 
-        btnRegresar.setText("REGRESAR");
-        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRegresarActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnConsultar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnRegistrar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnActualizar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnEliminar))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(151, 151, 151)
-                        .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap()
+                .addComponent(btnConsultar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnRegistrar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnActualizar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnEliminar)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -238,9 +241,7 @@ public class Cliente extends javax.swing.JFrame {
                     .addComponent(btnActualizar)
                     .addComponent(btnEliminar)
                     .addComponent(btnConsultar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
-                .addComponent(btnRegresar)
-                .addContainerGap())
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -255,8 +256,8 @@ public class Cliente extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -273,24 +274,26 @@ public class Cliente extends javax.swing.JFrame {
             String telefono = txtTelefono.getText();
             String correo = txtCorreo.getText();
             String direccion = txtDireccion.getText();
-            
             java.util.Date fechaIngreso = (java.util.Date) txtFechaIngreso.getValue();
             java.sql.Date fechaSQL = new java.sql.Date(fechaIngreso.getTime());
-            
+             String nit = txtNit.getText();
+             
             if (nombre.isEmpty() || telefono.isEmpty() || correo.isEmpty() ||
             direccion.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Complete todos los campos antes de actualizar.");
             return;
             }
             
-            String qry = "UPDATE public.clientes SET nombre = ?, telefono = ?, correo = ?, direccion = ?, fecha_ingreso = ?  WHERE cliente_id = ?";
+            String qry = "UPDATE public.clientes SET nombre = ?, telefono = ?, correo = ?, direccion = ?, fecha_ingreso = ?, nit = ?  WHERE cliente_id = ?";
             PreparedStatement ps = con.prepareStatement(qry);
             ps.setString(1, nombre);
             ps.setString(2, telefono);
             ps.setString(3, correo);
             ps.setString(4, direccion);
             ps.setDate(5, fechaSQL);
-            ps.setInt(6, clienteId);
+            ps.setString(6, nit);
+            ps.setInt(7, clienteId);
+            
      
             
             
@@ -324,20 +327,22 @@ public class Cliente extends javax.swing.JFrame {
                         String telefono = rs.getString("telefono");
                         String correo = rs.getString("correo");
                         String direccion = rs.getString("direccion");
+                        String nit = rs.getString("nit");
                         
                         txtNombre.setText(nombre);
                         txtTelefono.setText(telefono);
                         txtCorreo.setText(correo);                      
                         txtDireccion.setText(direccion);
+                        txtNit.setText(nit);
                         
                        java.sql.Date fechaSQL = rs.getDate("fecha_ingreso");
                         if (fechaSQL != null) {
                             java.util.Date fecha = new java.util.Date(fechaSQL.getTime());
                             java.text.SimpleDateFormat formato = new java.text.SimpleDateFormat("dd/MM/yyyy");
                             String fechaFormateada = formato.format(fecha);
-                            txtFechaIngreso.setText(fechaFormateada); // Usamos setText, no setValue
+                            txtFechaIngreso.setText(fechaFormateada); 
                         } else {
-                            txtFechaIngreso.setText(""); // Campo vacío si no hay fecha
+                            txtFechaIngreso.setText("");
                         }
 
                         
@@ -359,7 +364,8 @@ public class Cliente extends javax.swing.JFrame {
         txtTelefono.setText("");
         txtCorreo.setText("");
         txtDireccion.setText("");        
-        txtFechaIngreso.setText("");        
+        txtFechaIngreso.setText(""); 
+        txtNit.setText("");
         txtId.requestFocus();
         
         
@@ -371,6 +377,7 @@ public class Cliente extends javax.swing.JFrame {
             String telefono = txtTelefono.getText();
             String correo = txtCorreo.getText();
             String direccion = txtDireccion.getText();
+            String nit = txtNit.getText();
             
             java.util.Date fechaIngreso = (java.util.Date) txtFechaIngreso.getValue();
             java.sql.Date fechaSQL = new java.sql.Date(fechaIngreso.getTime());
@@ -380,14 +387,15 @@ public class Cliente extends javax.swing.JFrame {
                 return;
             }            
             
-            String qry = "INSERT INTO public.clientes(nombre, telefono, correo, direccion, fecha_ingreso)" + " values(?,?,?,?,?)";
+            String qry = "INSERT INTO public.clientes(nombre, telefono, correo, direccion, fecha_ingreso)" + " values(?,?,?,?,?,?)";
             
             PreparedStatement ps = con.prepareStatement (qry);
             ps.setString(1, nombreCliente);
             ps.setString(2, telefono);
             ps.setString(3, correo);
             ps.setString(4, direccion);
-            ps.setDate(5, fechaSQL);         
+            ps.setDate(5, fechaSQL);   
+            ps.setString(6, nit);
             
             int filasInsertadas = ps.executeUpdate();
             
@@ -434,21 +442,6 @@ public class Cliente extends javax.swing.JFrame {
     }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
-    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-
-    if ("administrador".equals(origen)){
-        new interfazAdministrador().setVisible(true);
-    } else if ("mesero/cajero".equals(origen)){
-        new interfazMeseroCajero().setVisible(true);
-    }this.dispose();
-    
-
-   new interfazMeseroCajero().setVisible(true);
-    Cliente.this.dispose();
-    // TODO add your handling code here:
-
-    }//GEN-LAST:event_btnRegresarActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -479,7 +472,6 @@ public class Cliente extends javax.swing.JFrame {
     private javax.swing.JButton btnConsultar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnRegistrar;
-    private javax.swing.JButton btnRegresar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -487,12 +479,14 @@ public class Cliente extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtDireccion;
     private javax.swing.JFormattedTextField txtFechaIngreso;
     private javax.swing.JTextField txtId;
+    private javax.swing.JTextField txtNit;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
