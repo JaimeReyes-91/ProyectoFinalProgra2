@@ -45,7 +45,7 @@ import java.math.BigDecimal;
  *
  * @author Coloc
  */
-public class PedidosyFacturacion extends javax.swing.JFrame {
+public class PedidosyFacturacion extends javax.swing.JInternalFrame {
     Conexion ConexionPostgres = new Conexion();
     Connection con;
     

@@ -377,7 +377,11 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_menuEliminarUsuariosActionPerformed
 
     private void itemNuevoPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemNuevoPedidoActionPerformed
-        mostrarVentana(new Pedidos());
+       try {
+           mostrarVentana(new PedidosyFacturacion());
+       } catch (SQLException ex) {
+           System.getLogger(Main.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+       }
     }//GEN-LAST:event_itemNuevoPedidoActionPerformed
 
     private void menuEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEmpleadosActionPerformed
