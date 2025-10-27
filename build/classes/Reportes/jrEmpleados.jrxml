@@ -95,11 +95,11 @@
 			</staticText>
 			<image>
 				<reportElement x="1" y="0" width="109" height="90" uuid="e73806b7-3047-4faf-852a-248abcff393d"/>
-				<imageExpression><![CDATA["C:/Users/dinae/OneDrive/Documentos/NetBeansProjects/ProyectoFinal/src/Iconos/logo.png"]]></imageExpression>
+				<imageExpression><![CDATA["C:/Users/Coloc/OneDrive/Escritorio/Proyecto Progra II/ProyectoFinalProgra2/src/Iconos/logo.png"]]></imageExpression>
 			</image>
 			<image>
 				<reportElement x="690" y="0" width="110" height="90" uuid="ed089239-9830-437f-86e6-d85272161818"/>
-				<imageExpression><![CDATA["C:/Users/dinae/OneDrive/Documentos/NetBeansProjects/ProyectoFinal/src/Iconos/LOGO.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["C:/Users/Coloc/OneDrive/Escritorio/Proyecto Progra II/ProyectoFinalProgra2/src/Iconos/LOGO.jpg"]]></imageExpression>
 			</image>
 		</band>
 	</title>

@@ -45,7 +45,7 @@ import java.math.BigDecimal;
  *
  * @author Coloc
  */
-public class PedidosyFacturacion extends javax.swing.JFrame {
+public class PedidosyFacturacion extends javax.swing.JInternalFrame {
     Conexion ConexionPostgres = new Conexion();
     Connection con;
     
@@ -79,8 +79,7 @@ public class PedidosyFacturacion extends javax.swing.JFrame {
             public boolean isCellEditable(int row, int column) {
                 return column == 2; // Permitir edición solo en la columna "Cantidad" (índice 2)
             }
-        };
-        
+        };    
         // 3. Asignar el modelo al componente JTable
         tblPedido.setModel(modeloTabla);
     }
