@@ -115,26 +115,24 @@ public class Main extends javax.swing.JFrame {
         ItemInicio = new javax.swing.JMenuItem();
         ItemCerrarSesion = new javax.swing.JMenuItem();
         ItemSalir = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
         MenuGestion = new javax.swing.JMenu();
-        ItemEmpleados = new javax.swing.JMenuItem();
-        ItemProductos = new javax.swing.JMenuItem();
-        ItemCategorias = new javax.swing.JMenuItem();
-        ItemProveedores = new javax.swing.JMenuItem();
-        ItemClientes = new javax.swing.JMenuItem();
+        itemEmpleados = new javax.swing.JMenuItem();
+        itemProductos = new javax.swing.JMenuItem();
+        itemCategorias = new javax.swing.JMenuItem();
+        itemProveedores = new javax.swing.JMenuItem();
+        itemClientes = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
         MenuPedidos = new javax.swing.JMenu();
         itemNuevoPedido = new javax.swing.JMenuItem();
         jMenuItem9 = new javax.swing.JMenuItem();
         jMenuItem10 = new javax.swing.JMenuItem();
-        MenuUsuarios = new javax.swing.JMenu();
-        menuRegistrarUsuarios = new javax.swing.JMenuItem();
-        menuVerUsuarios = new javax.swing.JMenuItem();
-        menuEditarUsuarios = new javax.swing.JMenuItem();
-        menuEliminarUsuarios = new javax.swing.JMenuItem();
         MenuReportes = new javax.swing.JMenu();
-        jMenuItem15 = new javax.swing.JMenuItem();
         menuEmpleados = new javax.swing.JMenuItem();
-        jMenuItem17 = new javax.swing.JMenuItem();
-        jMenuItem18 = new javax.swing.JMenuItem();
+        menuProductos = new javax.swing.JMenuItem();
+        menuProveedores = new javax.swing.JMenuItem();
+        menuClientes = new javax.swing.JMenuItem();
+        menuFacturas = new javax.swing.JMenuItem();
         MenuConfiguracion = new javax.swing.JMenu();
         jMenuItem19 = new javax.swing.JMenuItem();
         jMenuItem20 = new javax.swing.JMenuItem();
@@ -174,7 +172,7 @@ public class Main extends javax.swing.JFrame {
         MenuArchivo.setText("Archivo");
         MenuArchivo.setMinimumSize(new java.awt.Dimension(75, 30));
 
-        ItemInicio.setText("Inicio");
+        ItemInicio.setText("Iniciar sesión");
         ItemInicio.setPreferredSize(new java.awt.Dimension(77, 30));
         ItemInicio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -191,40 +189,46 @@ public class Main extends javax.swing.JFrame {
         ItemSalir.setPreferredSize(new java.awt.Dimension(72, 30));
         MenuArchivo.add(ItemSalir);
 
+        jMenuItem3.setText("jMenuItem3");
+        MenuArchivo.add(jMenuItem3);
+
         jMenuBar1.add(MenuArchivo);
 
         MenuGestion.setText("Gestión");
         MenuGestion.setMinimumSize(new java.awt.Dimension(75, 30));
 
-        ItemEmpleados.setText("Empleados");
-        ItemEmpleados.setPreferredSize(new java.awt.Dimension(106, 30));
-        ItemEmpleados.addActionListener(new java.awt.event.ActionListener() {
+        itemEmpleados.setText("Empleados");
+        itemEmpleados.setPreferredSize(new java.awt.Dimension(106, 30));
+        itemEmpleados.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ItemEmpleadosActionPerformed(evt);
+                itemEmpleadosActionPerformed(evt);
             }
         });
-        MenuGestion.add(ItemEmpleados);
+        MenuGestion.add(itemEmpleados);
 
-        ItemProductos.setText("Productos");
-        ItemProductos.setPreferredSize(new java.awt.Dimension(102, 30));
-        ItemProductos.addActionListener(new java.awt.event.ActionListener() {
+        itemProductos.setText("Productos");
+        itemProductos.setPreferredSize(new java.awt.Dimension(102, 30));
+        itemProductos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ItemProductosActionPerformed(evt);
+                itemProductosActionPerformed(evt);
             }
         });
-        MenuGestion.add(ItemProductos);
+        MenuGestion.add(itemProductos);
 
-        ItemCategorias.setText("Categorías");
-        ItemCategorias.setPreferredSize(new java.awt.Dimension(104, 30));
-        MenuGestion.add(ItemCategorias);
+        itemCategorias.setText("Categorías");
+        itemCategorias.setPreferredSize(new java.awt.Dimension(104, 30));
+        MenuGestion.add(itemCategorias);
 
-        ItemProveedores.setText("Proveedores");
-        ItemProveedores.setPreferredSize(new java.awt.Dimension(113, 30));
-        MenuGestion.add(ItemProveedores);
+        itemProveedores.setText("Proveedores");
+        itemProveedores.setPreferredSize(new java.awt.Dimension(113, 30));
+        MenuGestion.add(itemProveedores);
 
-        ItemClientes.setText("Clientes");
-        ItemClientes.setPreferredSize(new java.awt.Dimension(90, 30));
-        MenuGestion.add(ItemClientes);
+        itemClientes.setText("Clientes");
+        itemClientes.setPreferredSize(new java.awt.Dimension(90, 30));
+        MenuGestion.add(itemClientes);
+
+        jMenuItem2.setText("jMenuItem2");
+        MenuGestion.add(jMenuItem2);
 
         jMenuBar1.add(MenuGestion);
 
@@ -247,46 +251,7 @@ public class Main extends javax.swing.JFrame {
 
         jMenuBar1.add(MenuPedidos);
 
-        MenuUsuarios.setText("Usuarios");
-
-        menuRegistrarUsuarios.setText("Registrar usuarios");
-        menuRegistrarUsuarios.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuRegistrarUsuariosActionPerformed(evt);
-            }
-        });
-        MenuUsuarios.add(menuRegistrarUsuarios);
-
-        menuVerUsuarios.setText("Ver usuarios");
-        menuVerUsuarios.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuVerUsuariosActionPerformed(evt);
-            }
-        });
-        MenuUsuarios.add(menuVerUsuarios);
-
-        menuEditarUsuarios.setText("Editar usuarios");
-        menuEditarUsuarios.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuEditarUsuariosActionPerformed(evt);
-            }
-        });
-        MenuUsuarios.add(menuEditarUsuarios);
-
-        menuEliminarUsuarios.setText("Eliminar usuarios");
-        menuEliminarUsuarios.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuEliminarUsuariosActionPerformed(evt);
-            }
-        });
-        MenuUsuarios.add(menuEliminarUsuarios);
-
-        jMenuBar1.add(MenuUsuarios);
-
         MenuReportes.setText("Reportes");
-
-        jMenuItem15.setText("Reporte de ventas");
-        MenuReportes.add(jMenuItem15);
 
         menuEmpleados.setText("Empleados");
         menuEmpleados.addActionListener(new java.awt.event.ActionListener() {
@@ -296,11 +261,37 @@ public class Main extends javax.swing.JFrame {
         });
         MenuReportes.add(menuEmpleados);
 
-        jMenuItem17.setText("Clientes frecuentes");
-        MenuReportes.add(jMenuItem17);
+        menuProductos.setText("Productos");
+        menuProductos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuProductosActionPerformed(evt);
+            }
+        });
+        MenuReportes.add(menuProductos);
 
-        jMenuItem18.setText("Exportar reporte a PDF");
-        MenuReportes.add(jMenuItem18);
+        menuProveedores.setText("Proveedores");
+        menuProveedores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuProveedoresActionPerformed(evt);
+            }
+        });
+        MenuReportes.add(menuProveedores);
+
+        menuClientes.setText("Clientes");
+        menuClientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuClientesActionPerformed(evt);
+            }
+        });
+        MenuReportes.add(menuClientes);
+
+        menuFacturas.setText("Facturas");
+        menuFacturas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuFacturasActionPerformed(evt);
+            }
+        });
+        MenuReportes.add(menuFacturas);
 
         jMenuBar1.add(MenuReportes);
 
@@ -352,29 +343,13 @@ public class Main extends javax.swing.JFrame {
         mostrarVentana(new Login());
     }//GEN-LAST:event_ItemInicioActionPerformed
 
-    private void ItemEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ItemEmpleadosActionPerformed
+    private void itemEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemEmpleadosActionPerformed
         mostrarVentana(new Empleados());
-    }//GEN-LAST:event_ItemEmpleadosActionPerformed
+    }//GEN-LAST:event_itemEmpleadosActionPerformed
 
-    private void ItemProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ItemProductosActionPerformed
+    private void itemProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemProductosActionPerformed
         mostrarVentana(new Productos());
-    }//GEN-LAST:event_ItemProductosActionPerformed
-
-    private void menuRegistrarUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRegistrarUsuariosActionPerformed
-        mostrarVentana(new Usuarios());
-    }//GEN-LAST:event_menuRegistrarUsuariosActionPerformed
-
-    private void menuVerUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuVerUsuariosActionPerformed
-        mostrarVentana(new Usuarios());
-    }//GEN-LAST:event_menuVerUsuariosActionPerformed
-
-    private void menuEditarUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEditarUsuariosActionPerformed
-        mostrarVentana(new Usuarios());
-    }//GEN-LAST:event_menuEditarUsuariosActionPerformed
-
-    private void menuEliminarUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEliminarUsuariosActionPerformed
-        mostrarVentana(new Usuarios());
-    }//GEN-LAST:event_menuEliminarUsuariosActionPerformed
+    }//GEN-LAST:event_itemProductosActionPerformed
 
     private void itemNuevoPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemNuevoPedidoActionPerformed
        try {
@@ -388,6 +363,22 @@ public class Main extends javax.swing.JFrame {
        ReportUtils.mostrarReporte("/Reportes/jrEmpleados.jrxml", con, escritorio);
     }//GEN-LAST:event_menuEmpleadosActionPerformed
 
+    private void menuFacturasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFacturasActionPerformed
+        ReportUtils.mostrarReporte("/Reportes/jrFacturas.jrxml", con, escritorio);
+    }//GEN-LAST:event_menuFacturasActionPerformed
+
+    private void menuClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuClientesActionPerformed
+        ReportUtils.mostrarReporte("/Reportes/jrClientes.jrxml", con, escritorio);
+    }//GEN-LAST:event_menuClientesActionPerformed
+
+    private void menuProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuProductosActionPerformed
+        ReportUtils.mostrarReporte("/Reportes/jrProductos.jrxml", con, escritorio);
+    }//GEN-LAST:event_menuProductosActionPerformed
+
+    private void menuProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuProveedoresActionPerformed
+        ReportUtils.mostrarReporte("/Reportes/jrProveedores.jrxml", con, escritorio);
+    }//GEN-LAST:event_menuProveedoresActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -397,13 +388,8 @@ public class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem ItemCategorias;
     private javax.swing.JMenuItem ItemCerrarSesion;
-    private javax.swing.JMenuItem ItemClientes;
-    private javax.swing.JMenuItem ItemEmpleados;
     private javax.swing.JMenuItem ItemInicio;
-    private javax.swing.JMenuItem ItemProductos;
-    private javax.swing.JMenuItem ItemProveedores;
     private javax.swing.JMenuItem ItemSalir;
     private javax.swing.JMenu MenuArchivo;
     private javax.swing.JMenu MenuAyuda;
@@ -411,30 +397,33 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenu MenuGestion;
     private javax.swing.JMenu MenuPedidos;
     private javax.swing.JMenu MenuReportes;
-    private javax.swing.JMenu MenuUsuarios;
     private javax.swing.JDesktopPane escritorio;
+    private javax.swing.JMenuItem itemCategorias;
+    private javax.swing.JMenuItem itemClientes;
+    private javax.swing.JMenuItem itemEmpleados;
     private javax.swing.JMenuItem itemNuevoPedido;
+    private javax.swing.JMenuItem itemProductos;
+    private javax.swing.JMenuItem itemProveedores;
     private javax.swing.JMenu jMenu6;
     private javax.swing.JMenu jMenu7;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem10;
-    private javax.swing.JMenuItem jMenuItem15;
-    private javax.swing.JMenuItem jMenuItem17;
-    private javax.swing.JMenuItem jMenuItem18;
     private javax.swing.JMenuItem jMenuItem19;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem20;
     private javax.swing.JMenuItem jMenuItem21;
     private javax.swing.JMenuItem jMenuItem22;
     private javax.swing.JMenuItem jMenuItem23;
     private javax.swing.JMenuItem jMenuItem24;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JMenuItem menuEditarUsuarios;
-    private javax.swing.JMenuItem menuEliminarUsuarios;
+    private javax.swing.JMenuItem menuClientes;
     private javax.swing.JMenuItem menuEmpleados;
-    private javax.swing.JMenuItem menuRegistrarUsuarios;
-    private javax.swing.JMenuItem menuVerUsuarios;
+    private javax.swing.JMenuItem menuFacturas;
+    private javax.swing.JMenuItem menuProductos;
+    private javax.swing.JMenuItem menuProveedores;
     // End of variables declaration//GEN-END:variables
 
     
