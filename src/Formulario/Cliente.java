@@ -20,21 +20,8 @@ import javax.swing.text.DateFormatter;
 
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 8ff7f29e2263736fe01717f5be753d35af7f8c40
-//ramon
-/**
- *
- * @author dinae
- */
-
-<<<<<<< HEAD
 
 
-=======
->>>>>>> 8ff7f29e2263736fe01717f5be753d35af7f8c40
 public class Cliente extends javax.swing.JFrame {
     Conexion conexionPostgres = new Conexion();
     Connection con;
