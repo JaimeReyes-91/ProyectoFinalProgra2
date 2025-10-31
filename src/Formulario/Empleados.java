@@ -47,7 +47,6 @@ public class Empleados extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         btnInsertar = new javax.swing.JButton();
         btnConsultar = new javax.swing.JButton();
@@ -76,27 +75,10 @@ public class Empleados extends javax.swing.JInternalFrame {
         txtfecha = new javax.swing.JFormattedTextField();
         cmbEstado = new javax.swing.JComboBox<>();
 
-        jPanel1.setBackground(new java.awt.Color(204, 204, 255));
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 222, Short.MAX_VALUE)
-        );
-
-<<<<<<< HEAD
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-=======
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
         setTitle("Empleados");
->>>>>>> 7667ccca657ebef9d6c4506284cc07fc9b09ed0c
 
         jPanel2.setBackground(new java.awt.Color(153, 204, 255));
 
@@ -202,14 +184,8 @@ public class Empleados extends javax.swing.JInternalFrame {
             }
         });
 
-<<<<<<< HEAD
-        cbCargo.setBackground(new java.awt.Color(102, 102, 255));
-        cbCargo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Gerente", "Chef", "Sous Chef", "Cocinero", "Mesero", "Cajero", "Lavaplatos", "Recepcionista", "" }));
-        cbCargo.addActionListener(new java.awt.event.ActionListener() {
-=======
-        cmbCargo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " Gerente", " Chef", " Sous Chef", " Cocinero", " Mesero ", " Cajero", " Lavaplatos ", " Recepcionista", " " }));
+        cmbCargo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Gerente", "Chef", "Sous Chef", "Cocinero", "Mesero", "Cajero", "Lavaplatos", "Recepcionista", "" }));
         cmbCargo.addActionListener(new java.awt.event.ActionListener() {
->>>>>>> 7667ccca657ebef9d6c4506284cc07fc9b09ed0c
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbCargoActionPerformed(evt);
             }
@@ -626,7 +602,6 @@ public class Empleados extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JTextField txtApellido;

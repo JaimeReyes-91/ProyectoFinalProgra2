@@ -20,12 +20,9 @@ import proyectofinal.SesionUsuario;
 
 
 
-<<<<<<< HEAD
-public class Cliente extends javax.swing.JFrame {
-=======
 
 public class Cliente extends javax.swing.JInternalFrame {
->>>>>>> 7667ccca657ebef9d6c4506284cc07fc9b09ed0c
+
     Conexion conexionPostgres = new Conexion();
     Connection con;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Cliente.class.getName());
