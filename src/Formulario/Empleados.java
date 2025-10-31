@@ -89,10 +89,14 @@ public class Empleados extends javax.swing.JInternalFrame {
             .addGap(0, 222, Short.MAX_VALUE)
         );
 
+<<<<<<< HEAD
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+=======
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
         setTitle("Empleados");
+>>>>>>> 7667ccca657ebef9d6c4506284cc07fc9b09ed0c
 
         jPanel2.setBackground(new java.awt.Color(153, 204, 255));
 
@@ -198,8 +202,14 @@ public class Empleados extends javax.swing.JInternalFrame {
             }
         });
 
+<<<<<<< HEAD
+        cbCargo.setBackground(new java.awt.Color(102, 102, 255));
+        cbCargo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Gerente", "Chef", "Sous Chef", "Cocinero", "Mesero", "Cajero", "Lavaplatos", "Recepcionista", "" }));
+        cbCargo.addActionListener(new java.awt.event.ActionListener() {
+=======
         cmbCargo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " Gerente", " Chef", " Sous Chef", " Cocinero", " Mesero ", " Cajero", " Lavaplatos ", " Recepcionista", " " }));
         cmbCargo.addActionListener(new java.awt.event.ActionListener() {
+>>>>>>> 7667ccca657ebef9d6c4506284cc07fc9b09ed0c
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbCargoActionPerformed(evt);
             }

@@ -20,6 +20,9 @@ import proyectofinal.SesionUsuario;
 
 
 
+<<<<<<< HEAD
+public class Cliente extends javax.swing.JFrame {
+=======
 
 <<<<<<< HEAD
 public class Cliente extends javax.swing.JFrame {

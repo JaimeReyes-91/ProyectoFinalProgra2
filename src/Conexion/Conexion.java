@@ -37,7 +37,10 @@ public class Conexion {
     public Conexion(){
 <<<<<<< HEAD
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> ramon
         String path = "C:\\Users\\Coloc\\OneDrive\\Escritorio\\Proyecto Progra II\\ProyectoFinalProgra2\\src\\Conexion\\db_config.properties";
 
 =======
