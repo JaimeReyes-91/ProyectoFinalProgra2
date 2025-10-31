@@ -36,12 +36,15 @@ public class Conexion {
     
     public Conexion(){
 
+<<<<<<< HEAD
 
 
         String path = "C:\\Users\\Gerardo\\OneDrive - Universidad Mariano Gálvez\\Escritorio\\Proyecto Progra II\\ProyectoFinalProgra2\\src\\Conexion\\db_config.properties";
 
+=======
+        String path = "C:\\Users\\Coloc\\OneDrive\\Escritorio\\Proyecto Progra II\\ProyectoFinalProgra2\\src\\Conexion\\db_config.properties";
+>>>>>>> 27d136d05ca5d6f02c8fe4e892130ca8fcbbe3f2
 
-        InputStream in=null;
         
         try{
             in = Files.newInputStream(Paths.get(path));
