@@ -661,7 +661,7 @@ try {
             viewer.setBounds(0, 0, escritorio.getWidth(), escritorio.getHeight());
             viewer.setVisible(true); // Asegurar visibilidad
             escritorio.revalidate();
-            escritorio.repaint();
+            escritorio.repaint(); 
 
         } catch (JRException e) {
             // Error específico de JasperReports (compilación, llenado)
