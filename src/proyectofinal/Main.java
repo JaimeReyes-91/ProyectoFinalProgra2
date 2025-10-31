@@ -41,6 +41,58 @@ public class Main extends javax.swing.JFrame {
    Conexion conexionPostgres = new Conexion();
     Connection con;
 
+    public Main() {
+        initComponents();
+        setTitle("Karl's Restaurant");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        try {
+            con = conexionPostgres.getConexion();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error de conexión: " + e.getMessage());
+        }
+
+        actualizarUsuarioActivo();
+        bloquearMenus();
+    }
+
+     public void bloquearMenus() {
+        MenuGestion.setEnabled(false);
+        MenuPedidos.setEnabled(false);
+        MenuReportes.setEnabled(false);
+        MenuConfiguracion.setEnabled(false);
+        ItemCerrarSesion.setEnabled(false);
+    }
+
+    public void habilitarMenus() {
+        MenuGestion.setEnabled(true);
+        MenuPedidos.setEnabled(true);
+        MenuReportes.setEnabled(true);
+        MenuConfiguracion.setEnabled(true);
+        ItemCerrarSesion.setEnabled(true);
+    }
+    
+    public void actualizarUsuarioActivo() {
+        if (SesionUsuario.sesionActiva()) {
+            lblUsuario.setText("Usuario activo: " + SesionUsuario.getUsuarioActual());
+        } else {
+            lblUsuario.setText("No hay sesión activa");
+        }
+    }
+/*
+   private void ItemInicioActionPerformed(java.awt.event.ActionEvent evt) {
+        Login loginFrame = new Login(this);
+        mostrarVentana(loginFrame);
+    }
+
+   private void ItemCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {
+        SesionUsuario.cerrarSesion();
+        JOptionPane.showMessageDialog(this, "Sesión finalizada correctamente.");
+        actualizarUsuarioActivo();
+        bloquearMenus();
+    }
+    */
     private void mostrarVentana(JInternalFrame frame) {
         escritorio.removeAll();
         escritorio.repaint();
@@ -50,6 +102,7 @@ public class Main extends javax.swing.JFrame {
         frame.setVisible(true);
         escritorio.add(frame);
     }
+    
     
     public class ReportUtils {
     public static void mostrarReporte(String ruta, Connection con, JDesktopPane escritorio) {
@@ -81,26 +134,9 @@ public class Main extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Main.class.getName());
     
-    /**
-     * Creates new form Main
-     */
-    public Main() {
-        initComponents();
-        setTitle("Karl's Restaurant");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setExtendedState(JFrame.MAXIMIZED_BOTH); 
-        
-        try{
-            con = conexionPostgres.getConexion();
-            
-        }catch (SQLException e){
-            e.getMessage();
-        }
-    
-    }
-
+    private boolean usuarioLogeado = false;
+    private String nombreUsuarioActual = "";
    
-     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -110,37 +146,32 @@ public class Main extends javax.swing.JFrame {
         jMenu7 = new javax.swing.JMenu();
         jTextField1 = new javax.swing.JTextField();
         escritorio = new javax.swing.JDesktopPane();
+        lblUsuario = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         MenuArchivo = new javax.swing.JMenu();
         ItemInicio = new javax.swing.JMenuItem();
         ItemCerrarSesion = new javax.swing.JMenuItem();
-        ItemSalir = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        itemSalir = new javax.swing.JMenuItem();
         MenuGestion = new javax.swing.JMenu();
-        itemEmpleados = new javax.swing.JMenuItem();
-        itemProductos = new javax.swing.JMenuItem();
-        itemCategorias = new javax.swing.JMenuItem();
-        itemProveedores = new javax.swing.JMenuItem();
-        itemClientes = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        crudEmpleados = new javax.swing.JMenuItem();
+        crudProductos = new javax.swing.JMenuItem();
+        crudProveedores = new javax.swing.JMenuItem();
+        crudClientes = new javax.swing.JMenuItem();
+        crudUsuarios = new javax.swing.JMenuItem();
         MenuPedidos = new javax.swing.JMenu();
         itemNuevoPedido = new javax.swing.JMenuItem();
         jMenuItem9 = new javax.swing.JMenuItem();
-        jMenuItem10 = new javax.swing.JMenuItem();
         MenuReportes = new javax.swing.JMenu();
-        menuEmpleados = new javax.swing.JMenuItem();
-        menuProductos = new javax.swing.JMenuItem();
-        menuProveedores = new javax.swing.JMenuItem();
-        menuClientes = new javax.swing.JMenuItem();
-        menuFacturas = new javax.swing.JMenuItem();
+        repEmpleados = new javax.swing.JMenuItem();
+        repProductos = new javax.swing.JMenuItem();
+        repProveedores = new javax.swing.JMenuItem();
+        repClientes = new javax.swing.JMenuItem();
+        repFacturas = new javax.swing.JMenuItem();
+        repUsuarios = new javax.swing.JMenuItem();
         MenuConfiguracion = new javax.swing.JMenu();
-        jMenuItem19 = new javax.swing.JMenuItem();
         jMenuItem20 = new javax.swing.JMenuItem();
-        jMenuItem21 = new javax.swing.JMenuItem();
         MenuAyuda = new javax.swing.JMenu();
-        jMenuItem22 = new javax.swing.JMenuItem();
         jMenuItem23 = new javax.swing.JMenuItem();
-        jMenuItem24 = new javax.swing.JMenuItem();
 
         jMenu6.setText("File");
         jMenuBar2.add(jMenu6);
@@ -162,7 +193,7 @@ public class Main extends javax.swing.JFrame {
         );
         escritorioLayout.setVerticalGroup(
             escritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 408, Short.MAX_VALUE)
+            .addGap(0, 438, Short.MAX_VALUE)
         );
 
         jMenuBar1.setBackground(new java.awt.Color(204, 204, 255));
@@ -183,52 +214,69 @@ public class Main extends javax.swing.JFrame {
 
         ItemCerrarSesion.setText("Cerrar sesión");
         ItemCerrarSesion.setPreferredSize(new java.awt.Dimension(116, 30));
+        ItemCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ItemCerrarSesionActionPerformed(evt);
+            }
+        });
         MenuArchivo.add(ItemCerrarSesion);
 
-        ItemSalir.setText("Salir");
-        ItemSalir.setPreferredSize(new java.awt.Dimension(72, 30));
-        MenuArchivo.add(ItemSalir);
-
-        jMenuItem3.setText("jMenuItem3");
-        MenuArchivo.add(jMenuItem3);
+        itemSalir.setText("Salir");
+        itemSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemSalirActionPerformed(evt);
+            }
+        });
+        MenuArchivo.add(itemSalir);
 
         jMenuBar1.add(MenuArchivo);
 
         MenuGestion.setText("Gestión");
         MenuGestion.setMinimumSize(new java.awt.Dimension(75, 30));
 
-        itemEmpleados.setText("Empleados");
-        itemEmpleados.setPreferredSize(new java.awt.Dimension(106, 30));
-        itemEmpleados.addActionListener(new java.awt.event.ActionListener() {
+        crudEmpleados.setText("Empleados");
+        crudEmpleados.setPreferredSize(new java.awt.Dimension(106, 30));
+        crudEmpleados.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                itemEmpleadosActionPerformed(evt);
+                crudEmpleadosActionPerformed(evt);
             }
         });
-        MenuGestion.add(itemEmpleados);
+        MenuGestion.add(crudEmpleados);
 
-        itemProductos.setText("Productos");
-        itemProductos.setPreferredSize(new java.awt.Dimension(102, 30));
-        itemProductos.addActionListener(new java.awt.event.ActionListener() {
+        crudProductos.setText("Productos");
+        crudProductos.setPreferredSize(new java.awt.Dimension(102, 30));
+        crudProductos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                itemProductosActionPerformed(evt);
+                crudProductosActionPerformed(evt);
             }
         });
-        MenuGestion.add(itemProductos);
+        MenuGestion.add(crudProductos);
 
-        itemCategorias.setText("Categorías");
-        itemCategorias.setPreferredSize(new java.awt.Dimension(104, 30));
-        MenuGestion.add(itemCategorias);
+        crudProveedores.setText("Proveedores");
+        crudProveedores.setPreferredSize(new java.awt.Dimension(113, 30));
+        crudProveedores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                crudProveedoresActionPerformed(evt);
+            }
+        });
+        MenuGestion.add(crudProveedores);
 
-        itemProveedores.setText("Proveedores");
-        itemProveedores.setPreferredSize(new java.awt.Dimension(113, 30));
-        MenuGestion.add(itemProveedores);
+        crudClientes.setText("Clientes");
+        crudClientes.setPreferredSize(new java.awt.Dimension(90, 30));
+        crudClientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                crudClientesActionPerformed(evt);
+            }
+        });
+        MenuGestion.add(crudClientes);
 
-        itemClientes.setText("Clientes");
-        itemClientes.setPreferredSize(new java.awt.Dimension(90, 30));
-        MenuGestion.add(itemClientes);
-
-        jMenuItem2.setText("jMenuItem2");
-        MenuGestion.add(jMenuItem2);
+        crudUsuarios.setText("Usuarios");
+        crudUsuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                crudUsuariosActionPerformed(evt);
+            }
+        });
+        MenuGestion.add(crudUsuarios);
 
         jMenuBar1.add(MenuGestion);
 
@@ -246,78 +294,71 @@ public class Main extends javax.swing.JFrame {
         jMenuItem9.setText("Ver pedidos");
         MenuPedidos.add(jMenuItem9);
 
-        jMenuItem10.setText("Generar factura PDF");
-        MenuPedidos.add(jMenuItem10);
-
         jMenuBar1.add(MenuPedidos);
 
         MenuReportes.setText("Reportes");
 
-        menuEmpleados.setText("Empleados");
-        menuEmpleados.addActionListener(new java.awt.event.ActionListener() {
+        repEmpleados.setText("Empleados");
+        repEmpleados.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuEmpleadosActionPerformed(evt);
+                repEmpleadosActionPerformed(evt);
             }
         });
-        MenuReportes.add(menuEmpleados);
+        MenuReportes.add(repEmpleados);
 
-        menuProductos.setText("Productos");
-        menuProductos.addActionListener(new java.awt.event.ActionListener() {
+        repProductos.setText("Productos");
+        repProductos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuProductosActionPerformed(evt);
+                repProductosActionPerformed(evt);
             }
         });
-        MenuReportes.add(menuProductos);
+        MenuReportes.add(repProductos);
 
-        menuProveedores.setText("Proveedores");
-        menuProveedores.addActionListener(new java.awt.event.ActionListener() {
+        repProveedores.setText("Proveedores");
+        repProveedores.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuProveedoresActionPerformed(evt);
+                repProveedoresActionPerformed(evt);
             }
         });
-        MenuReportes.add(menuProveedores);
+        MenuReportes.add(repProveedores);
 
-        menuClientes.setText("Clientes");
-        menuClientes.addActionListener(new java.awt.event.ActionListener() {
+        repClientes.setText("Clientes");
+        repClientes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuClientesActionPerformed(evt);
+                repClientesActionPerformed(evt);
             }
         });
-        MenuReportes.add(menuClientes);
+        MenuReportes.add(repClientes);
 
-        menuFacturas.setText("Facturas");
-        menuFacturas.addActionListener(new java.awt.event.ActionListener() {
+        repFacturas.setText("Facturas");
+        repFacturas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuFacturasActionPerformed(evt);
+                repFacturasActionPerformed(evt);
             }
         });
-        MenuReportes.add(menuFacturas);
+        MenuReportes.add(repFacturas);
+
+        repUsuarios.setText("Usuarios");
+        repUsuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                repUsuariosActionPerformed(evt);
+            }
+        });
+        MenuReportes.add(repUsuarios);
 
         jMenuBar1.add(MenuReportes);
 
         MenuConfiguracion.setText("Configuración");
 
-        jMenuItem19.setText("Configuración DB");
-        MenuConfiguracion.add(jMenuItem19);
-
         jMenuItem20.setText("Información del restaurante");
         MenuConfiguracion.add(jMenuItem20);
-
-        jMenuItem21.setText("Preferencias del sistema");
-        MenuConfiguracion.add(jMenuItem21);
 
         jMenuBar1.add(MenuConfiguracion);
 
         MenuAyuda.setText("Ayuda");
 
-        jMenuItem22.setText("Manual de usuario");
-        MenuAyuda.add(jMenuItem22);
-
         jMenuItem23.setText("Acerca del sistema");
         MenuAyuda.add(jMenuItem23);
-
-        jMenuItem24.setText("Soporte");
-        MenuAyuda.add(jMenuItem24);
 
         jMenuBar1.add(MenuAyuda);
 
@@ -328,28 +369,35 @@ public class Main extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(escritorio)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addComponent(lblUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(escritorio)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void ItemInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ItemInicioActionPerformed
-        mostrarVentana(new Login());
+        Login login = new Login(this);
+        mostrarVentana(login);
+
     }//GEN-LAST:event_ItemInicioActionPerformed
 
-    private void itemEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemEmpleadosActionPerformed
+    private void crudEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crudEmpleadosActionPerformed
         mostrarVentana(new Empleados());
-    }//GEN-LAST:event_itemEmpleadosActionPerformed
+    }//GEN-LAST:event_crudEmpleadosActionPerformed
 
-    private void itemProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemProductosActionPerformed
+    private void crudProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crudProductosActionPerformed
         mostrarVentana(new Productos());
-    }//GEN-LAST:event_itemProductosActionPerformed
+    }//GEN-LAST:event_crudProductosActionPerformed
 
     private void itemNuevoPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemNuevoPedidoActionPerformed
        try {
@@ -359,71 +407,96 @@ public class Main extends javax.swing.JFrame {
        }
     }//GEN-LAST:event_itemNuevoPedidoActionPerformed
 
-    private void menuEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEmpleadosActionPerformed
+    private void repEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repEmpleadosActionPerformed
        ReportUtils.mostrarReporte("/Reportes/jrEmpleados.jrxml", con, escritorio);
-    }//GEN-LAST:event_menuEmpleadosActionPerformed
+    }//GEN-LAST:event_repEmpleadosActionPerformed
 
-    private void menuFacturasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFacturasActionPerformed
+    private void repFacturasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repFacturasActionPerformed
         ReportUtils.mostrarReporte("/Reportes/jrFacturas.jrxml", con, escritorio);
-    }//GEN-LAST:event_menuFacturasActionPerformed
+    }//GEN-LAST:event_repFacturasActionPerformed
 
-    private void menuClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuClientesActionPerformed
+    private void repClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repClientesActionPerformed
         ReportUtils.mostrarReporte("/Reportes/jrClientes.jrxml", con, escritorio);
-    }//GEN-LAST:event_menuClientesActionPerformed
+    }//GEN-LAST:event_repClientesActionPerformed
 
-    private void menuProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuProductosActionPerformed
+    private void repProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repProductosActionPerformed
         ReportUtils.mostrarReporte("/Reportes/jrProductos.jrxml", con, escritorio);
-    }//GEN-LAST:event_menuProductosActionPerformed
+    }//GEN-LAST:event_repProductosActionPerformed
 
-    private void menuProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuProveedoresActionPerformed
+    private void repProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repProveedoresActionPerformed
         ReportUtils.mostrarReporte("/Reportes/jrProveedores.jrxml", con, escritorio);
-    }//GEN-LAST:event_menuProveedoresActionPerformed
+    }//GEN-LAST:event_repProveedoresActionPerformed
+
+    private void crudProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crudProveedoresActionPerformed
+        mostrarVentana(new Proveedor());
+    }//GEN-LAST:event_crudProveedoresActionPerformed
+
+    private void crudClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crudClientesActionPerformed
+        mostrarVentana(new Cliente());
+    }//GEN-LAST:event_crudClientesActionPerformed
+
+    private void crudUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crudUsuariosActionPerformed
+        mostrarVentana(new Usuarios());
+    }//GEN-LAST:event_crudUsuariosActionPerformed
+
+    private void repUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repUsuariosActionPerformed
+        ReportUtils.mostrarReporte("/Reportes/jrUsuarios.jrxml", con, escritorio);
+    }//GEN-LAST:event_repUsuariosActionPerformed
+
+    private void ItemCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ItemCerrarSesionActionPerformed
+        SesionUsuario.cerrarSesion();
+        JOptionPane.showMessageDialog(this, "Sesión finalizada correctamente.");
+        actualizarUsuarioActivo();
+        bloquearMenus();
+        
+    }//GEN-LAST:event_ItemCerrarSesionActionPerformed
+
+    private void itemSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemSalirActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_itemSalirActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        SwingUtilities.invokeLater(Main::new);
-        java.awt.EventQueue.invokeLater(() -> new Main().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> {
+            Main main = new Main();
+            main.setVisible(true);
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem ItemCerrarSesion;
     private javax.swing.JMenuItem ItemInicio;
-    private javax.swing.JMenuItem ItemSalir;
     private javax.swing.JMenu MenuArchivo;
     private javax.swing.JMenu MenuAyuda;
     private javax.swing.JMenu MenuConfiguracion;
     private javax.swing.JMenu MenuGestion;
     private javax.swing.JMenu MenuPedidos;
     private javax.swing.JMenu MenuReportes;
+    private javax.swing.JMenuItem crudClientes;
+    private javax.swing.JMenuItem crudEmpleados;
+    private javax.swing.JMenuItem crudProductos;
+    private javax.swing.JMenuItem crudProveedores;
+    private javax.swing.JMenuItem crudUsuarios;
     private javax.swing.JDesktopPane escritorio;
-    private javax.swing.JMenuItem itemCategorias;
-    private javax.swing.JMenuItem itemClientes;
-    private javax.swing.JMenuItem itemEmpleados;
     private javax.swing.JMenuItem itemNuevoPedido;
-    private javax.swing.JMenuItem itemProductos;
-    private javax.swing.JMenuItem itemProveedores;
+    private javax.swing.JMenuItem itemSalir;
     private javax.swing.JMenu jMenu6;
     private javax.swing.JMenu jMenu7;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
-    private javax.swing.JMenuItem jMenuItem10;
-    private javax.swing.JMenuItem jMenuItem19;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem20;
-    private javax.swing.JMenuItem jMenuItem21;
-    private javax.swing.JMenuItem jMenuItem22;
     private javax.swing.JMenuItem jMenuItem23;
-    private javax.swing.JMenuItem jMenuItem24;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JMenuItem menuClientes;
-    private javax.swing.JMenuItem menuEmpleados;
-    private javax.swing.JMenuItem menuFacturas;
-    private javax.swing.JMenuItem menuProductos;
-    private javax.swing.JMenuItem menuProveedores;
+    private javax.swing.JLabel lblUsuario;
+    private javax.swing.JMenuItem repClientes;
+    private javax.swing.JMenuItem repEmpleados;
+    private javax.swing.JMenuItem repFacturas;
+    private javax.swing.JMenuItem repProductos;
+    private javax.swing.JMenuItem repProveedores;
+    private javax.swing.JMenuItem repUsuarios;
     // End of variables declaration//GEN-END:variables
 
     
