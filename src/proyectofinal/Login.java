@@ -60,6 +60,12 @@ public class Login extends javax.swing.JInternalFrame {
 
         jLabel3.setText("Clave:");
 
+        txtClave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtClaveActionPerformed(evt);
+            }
+        });
+
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/Login.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -175,6 +181,10 @@ public class Login extends javax.swing.JInternalFrame {
         JOptionPane.showMessageDialog(this, "Error SQL: " + e.getMessage());
     }
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
+
+    private void txtClaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtClaveActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtClaveActionPerformed
     
 
     
