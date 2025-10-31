@@ -23,6 +23,8 @@ import javax.sql.DataSource;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+
+
 public class Conexion {
     
     static Properties config = new Properties();
@@ -38,6 +40,8 @@ public class Conexion {
 
         String path = "C:\\Users\\Coloc\\OneDrive\\Escritorio\\Proyecto Progra II\\ProyectoFinalProgra2\\src\\Conexion\\db_config.properties";
 
+
+        InputStream in=null;
         
         try{
             in = Files.newInputStream(Paths.get(path));
