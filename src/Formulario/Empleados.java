@@ -89,7 +89,7 @@ public class Empleados extends javax.swing.JInternalFrame {
             .addGap(0, 222, Short.MAX_VALUE)
         );
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel2.setBackground(new java.awt.Color(204, 204, 204));
 
@@ -198,7 +198,7 @@ public class Empleados extends javax.swing.JInternalFrame {
         });
 
         cbCargo.setBackground(new java.awt.Color(102, 102, 255));
-        cbCargo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " Gerente", " Chef", " Sous Chef", " Cocinero", " Mesero ", " Cajero", " Lavaplatos ", " Recepcionista", " " }));
+        cbCargo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Gerente", "Chef", "Sous Chef", "Cocinero", "Mesero", "Cajero", "Lavaplatos", "Recepcionista", "" }));
         cbCargo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbCargoActionPerformed(evt);

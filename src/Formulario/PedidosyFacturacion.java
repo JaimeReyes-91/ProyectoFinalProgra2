@@ -24,7 +24,7 @@ import javax.swing.table.DefaultTableModel;
 import java.text.SimpleDateFormat;
 import javax.swing.text.DateFormatter;
 
-import java.math.BigDecimal;
+
 import java.math.RoundingMode; // Necesario para redondear a dos decimales
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
@@ -32,7 +32,6 @@ import javax.swing.JOptionPane;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
-import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 //los que yo puse
@@ -41,6 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 /**
  *
  * @author Coloc
@@ -48,6 +48,7 @@ import java.math.BigDecimal;
 public class PedidosyFacturacion extends javax.swing.JInternalFrame {
     Conexion ConexionPostgres = new Conexion();
     Connection con;
+    private long ultimoFacturaIdGenerado = -1;
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PedidosyFacturacion.class.getName());
 
@@ -61,6 +62,7 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
         con = ConexionPostgres.getConexion();
         inicializarTablaPedido();
         configurarListenerTabla();
+        
     }
     
 
@@ -132,7 +134,7 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
         btnComprar = new javax.swing.JButton();
         btnCalcularDescuento = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("NIT");
 
@@ -253,6 +255,11 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
         });
 
         btnComprar.setText("Realizar Compra");
+        btnComprar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnComprarActionPerformed(evt);
+            }
+        });
 
         btnCalcularDescuento.setText("Calcular Descuento");
         btnCalcularDescuento.addActionListener(new java.awt.event.ActionListener() {
@@ -351,7 +358,7 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel16)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtIdEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtIdEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(btnComprar)
@@ -460,7 +467,7 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
         try{
             int cantidad = Integer.parseInt(txtCantidad.getText());
             if (cantidad <= 0){
-                throw new NumberFormatException();
+                throw new NumberFormatException("La cantidad debe ser mayor a 0");
             }
         } catch (NumberFormatException e){
             e.getMessage();
@@ -505,12 +512,12 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
                         JOptionPane.showMessageDialog(this, "Registro encontrado: " + nombre );
                         
                     }else{
-                        JOptionPane.showMessageDialog(null, "No se encontró el Cliente con el NIT: " + nit);
+                        JOptionPane.showMessageDialog(this, "No se encontró el Cliente con el NIT: " + nit);
                     }
                 }
             }
         }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e.getMessage());
+            JOptionPane.showMessageDialog(this, e.getMessage());
         }
                                             
     }//GEN-LAST:event_btnBuscarClienteActionPerformed
@@ -562,6 +569,44 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
         calcularRecargoYTotales();
         calcularYActualizarSubTotal();
     }//GEN-LAST:event_btnCalcularDescuentoActionPerformed
+
+    private void btnComprarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprarActionPerformed
+        boolean autoCommitOriginal = true;
+        try{
+            autoCommitOriginal = con.getAutoCommit();
+            con.setAutoCommit(false);
+            
+            String numeroSerie = obtenerYSaltarSiguienteNumeroSerie();
+            
+            long idGenerado= guardarFactura(numeroSerie);
+            
+            guardarDetalleFactura(idGenerado);
+            
+            con.commit();
+        
+        }catch (SQLException e){
+            try{
+            con.rollback();
+            JOptionPane.showMessageDialog(this, "Error en la base de datos: Transacción deshecha. Detalle:" + e.getMessage(), "Error DB", JOptionPane.ERROR_MESSAGE);
+            } catch (SQLException ex){
+                JOptionPane.showMessageDialog(this, "Error al realizar el rollback. Detalle:" + ex.getMessage(), "Error en el rollback", JOptionPane.ERROR_MESSAGE);
+            }  
+        }catch (RuntimeException exc){
+            try{
+                con.rollback();
+                JOptionPane.showMessageDialog(this, "Error al ingresar cantidades o datos: Transacción deshecha. Detalle:" + exc.getMessage(), "Error DB", JOptionPane.ERROR_MESSAGE);
+            }catch (SQLException exce){
+                JOptionPane.showMessageDialog(this, "Error al realizar el rollback: Transacción deshecha. Detalle:" + exce.getMessage(), "Error en el rollback", JOptionPane.ERROR_MESSAGE);
+            }
+        } finally {
+            try{
+                con.setAutoCommit(autoCommitOriginal);
+            } catch (SQLException exce){
+                JOptionPane.showMessageDialog(this, "Error al restaurar el AutoCommit. Detalle:" + exce.getMessage(), "Error en el AutoCommit", JOptionPane.ERROR_MESSAGE );
+            }
+        }
+        
+    }//GEN-LAST:event_btnComprarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -749,12 +794,12 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
             return;
         }
         try{
-            //2) iterar sobre todas las filas del Jtable
+            //2 iterar sobre todas las filas del Jtable
             for (int i=0; i < numFilas; i++){
-                //3)Obtener el valor de la columna importe, indice 4
+                //3Obtener el valor de la columna importe, indice 4
             Object valorImporte = modelo.getValueAt(i, 4);
             
-            //4) Convertir el valor a String y luego a Big Decimal 
+            //) Convertir el valor a String y luego a Big Decimal 
             BigDecimal importeFila = new BigDecimal(valorImporte.toString());
             //5 sumar el importe de la linea al subtotal general
             subTotal = subTotal.add(importeFila);
@@ -773,14 +818,11 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
     }
 public void calcularRecargoYTotales() {
     
-    // Asumimos que calcularYActualizarSubTotal() ya ha corrido
-    // y lblsubTotalPedido tiene el valor correcto.
-    
     // Constantes
     final BigDecimal TASA_ADICIONAL = new BigDecimal("0.05"); // 5%
     final BigDecimal TASA_IVA = new BigDecimal("0.12"); // Asumiendo 12% de IVA
     
-    // 1. Obtener los valores base (con manejo de errores)
+    // 1 Obtener los valores base (con manejo de errores)
     BigDecimal subTotal;
     BigDecimal descuentoManual;
     
@@ -789,15 +831,20 @@ public void calcularRecargoYTotales() {
         subTotal = new BigDecimal(lblsubTotalPedido.getText());
         
         // Obtenemos Descuento Manual del TextField (si está vacío, asumimos 0)
-        String descText = txtDescuento.getText().isEmpty() ? "0.00" : txtDescuento.getText();
-        descuentoManual = new BigDecimal(descText);
+        String descTextInput = txtDescuento.getText(); //.isEmpty() ? "0.00" : txtDescuento.getText();
+        String descTextUsable = descTextInput;
+        if (descTextInput == null || descTextInput.trim().isEmpty()){
+            descTextUsable = "0";
+        }
+        
+        descuentoManual = new BigDecimal(descTextUsable);
         
     } catch (NumberFormatException e) {
         JOptionPane.showMessageDialog(this, "Error: SubTotal o Descuento Manual no es un número válido.", "Error de Datos", JOptionPane.ERROR_MESSAGE);
         return; // Detiene el cálculo si hay error
     }
 
-    // 2. Calcular Recargo/Descuento por Método de Pago
+    // 2 Calcular Recargo/Descuento por Método de Pago
     BigDecimal ajustePorPago = BigDecimal.ZERO;
     String metodo = (String) jComboBox1.getSelectedItem();
 
@@ -810,15 +857,15 @@ public void calcularRecargoYTotales() {
         ajustePorPago = subTotal.multiply(TASA_ADICIONAL).setScale(2, RoundingMode.HALF_UP).negate();
     }
     
-    // 3. Actualizar el JLabel de Recargo (jLabel8) con el valor (positivo o negativo)
+    // 3 Actualizar el JLabel de Recargo (jLabel8) con el valor (positivo o negativo)
     // Usamos abs() para mostrar el valor absoluto del ajuste
     jLabel8.setText(ajustePorPago.abs().toString()); 
     
-    // 4. Calcular la Base Imponible, SubTotal - Descuento Manual + Ajuste por Pago
+    // 4 Calcular la Base Imponible, SubTotal - Descuento Manual + Ajuste por Pago
     // Nota: ajustePorPago es negativo si es descuento.
     BigDecimal baseImponible = subTotal.subtract(descuentoManual).add(ajustePorPago); 
     
-    // 5. Calcular iva
+    // 5 Calcular iva
     BigDecimal iva = baseImponible.multiply(TASA_IVA).setScale(2, RoundingMode.HALF_UP);
     lblIva.setText(iva.toString());
     
@@ -873,10 +920,7 @@ public void configurarListenerTabla() {
                         
                     } catch (NumberFormatException ex) {
                         // Si el usuario introduce texto inválido en la cantidad
-                        JOptionPane.showMessageDialog(null, 
-                            "La cantidad introducida no es un número válido.", 
-                            "Error de Entrada", 
-                            JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "La cantidad introducida no es un número válido.", "Error de Entrada", JOptionPane.ERROR_MESSAGE);
                         //Revertir la celda a 1 para evitar un cálculo erróneo
                         modelo.setValueAt("1", fila, COL_CANTIDAD); 
                         
@@ -888,6 +932,187 @@ public void configurarListenerTabla() {
             }
         }
     });
+}
+
+public String obtenerYSaltarSiguienteNumeroSerie() throws SQLException{
+    //SQL obtener obtener el último número y bloquear la fila 
+    String select_for_update = "SELECT ultimo_numero_factura FROM contador_facturas WHERE id = 1 FOR UPDATE";
+    
+    //Query sql para aumetnar y guardar el nuevo número
+    String update_sql = "UPDATE contador_facturas SET ultimo_numero_factura = ? WHERE id = 1";
+    
+    long siguienteNumero = 0;
+    
+    //Formato deseado para 
+    DecimalFormat formatoSerie = new DecimalFormat("000000000");
+    
+    //crucial 1 Desactivar el autocommit para manejar la transacción manualmente
+    boolean autoCommitOriginal = con.getAutoCommit();
+    con.setAutoCommit(false);
+    
+    try(PreparedStatement selectPs = con.prepareStatement(select_for_update);
+        PreparedStatement updatePs = con.prepareStatement(update_sql);
+    ){
+        // 1 Obtener el último número y bloquear la fila, si otro susario intenta esta línea al msimo tiempo, esperará hasta que la transacción actual (este bloque) termine
+        ResultSet rs = selectPs.executeQuery();
+        if (rs.next()){
+            long ultimoNumero = rs.getLong("ultimo_numero_factura");
+            siguienteNumero = ultimoNumero + 1;
+            updatePs.setLong(1, siguienteNumero);
+                updatePs.executeUpdate();
+                // confirmar la transacción y libera el bloqueo del for update
+                //con.commit();
+        } else{
+            //en el casod de que aún no exista el contador osea el primer registro de numero de serie
+            siguienteNumero = 1;
+            //String insertQry = "INSERT INTO contador_facturas (id, ultimo_numero_factura) VALUES (1,1)";
+            //try (PreparedStatement insertPs = con.prepareStatement(insertQry)){
+            // 2 Actualizar el contador en la base de datos con el nuevo valor
+            updatePs.setLong(1, siguienteNumero);
+                updatePs.executeUpdate();
+                // confirmar la transacción y libera el bloqueo del for update
+                //con.commit();
+            }
+        } catch (SQLException e){
+                    //si falla restaurar los cambios y volver al estado anterior 
+                    con.rollback();
+                    } finally {
+                    // crucial 2 restaurar el autocommit
+                    con.setAutoCommit(autoCommitOriginal); 
+    }
+    return formatoSerie.format(siguienteNumero);
+}
+
+public long getIdCliente()throws SQLException{
+    long clienteId = 0;
+    String nitInput = txtNit.getText();
+    String nitParaBusqueda = nitInput;
+
+     
+ 
+    
+    if (nitInput==null || nitInput.trim().isEmpty()){
+        nitParaBusqueda = "CF";
+        JOptionPane.showMessageDialog(null, "el campo NIT esta vacío se facturará al consumidor final (NIT: CF)", "AVISO DE NIT", JOptionPane.INFORMATION_MESSAGE);
+    }
+ 
+    
+    String qry = "SELECT cliente_id FROM public.clientes WHERE nit = ?";
+    try (PreparedStatement ps = con.prepareStatement(qry)){
+    ps.setString(1, nitParaBusqueda);
+    
+    try (ResultSet rs= ps.executeQuery()){ //se usa executeQuery por la clausula RETURNING del query, que trata al query como un select más allá de un insert
+    if (rs.next()){
+        clienteId = rs.getLong("cliente_id");
+    } else {
+        JOptionPane.showMessageDialog(null, "Error: Cliente con el nit:" + nitParaBusqueda + "no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    }  
+    }catch (SQLException e){
+        JOptionPane.showMessageDialog(null, "Error en la base de datos" + e, "Error DB", JOptionPane.ERROR_MESSAGE);
+    } 
+        return clienteId; 
+}
+
+public long guardarFactura(String numeroSerie)throws SQLException{
+
+    long clienteId = 0;
+    long empleadoId = 0;
+    BigDecimal total = null;
+    BigDecimal subTotal = null;
+    //BigDecimal descuento = null;
+    String txtDescInput = null;
+    String txtDescUsable = null;
+    BigDecimal iva = null;
+    String formaPago = "";
+    BigDecimal descuentoFinal = null;
+    
+    long idGenerado = -1;
+    String insertQry = "INSERT INTO public.facturas (cliente_id, empleado_id, total, numero_serie, subtotal, descuento, iva, forma_pago) VALUES (?,?,?,?,?,?,?,?) RETURNING factura_id";
+    
+    try{
+    clienteId = getIdCliente();
+    empleadoId = Long.parseLong(txtIdEmpleado.getText());
+    total = new BigDecimal(lblTotalPedido.getText());
+    subTotal = new BigDecimal (lblsubTotalPedido.getText());
+    //descuento = new BigDecimal (txtDescuento.getText());
+    
+    txtDescInput = txtDescuento.getText();
+    txtDescUsable = txtDescInput;
+    if (txtDescInput == null || txtDescInput.trim().isEmpty()){
+        txtDescUsable = "0";
+    }
+    descuentoFinal = new BigDecimal(txtDescUsable);
+    
+    iva = new BigDecimal (lblIva.getText());
+    formaPago = (String) jComboBox1.getSelectedItem();
+    }catch (NumberFormatException ex){
+        JOptionPane.showMessageDialog(null, "Error al ingresar digitos, revise los campos numéricos. Detalle:" + ex.getMessage(), "Error de entrada", JOptionPane.ERROR_MESSAGE);
+        throw new RuntimeException("error de los datos de la factura", ex);
+        
+    }
+    
+    try (PreparedStatement ps = con.prepareStatement(insertQry)){
+        
+        
+        ps.setLong(1, clienteId);
+        ps.setLong(2, empleadoId);
+        ps.setBigDecimal(3, total);
+        ps.setString(4, numeroSerie);
+        ps.setBigDecimal(5, subTotal);
+        ps.setBigDecimal(6, descuentoFinal);
+        ps.setBigDecimal(7, iva);
+        ps.setString(8, formaPago);
+        
+        try (ResultSet rs = ps.executeQuery()){ //se usa executeQuery por la clausula RETURNING del query, que trata al query como un select más allá de un insert
+            
+         if (rs.next()){
+         idGenerado = rs.getLong("factura_id");
+         this.ultimoFacturaIdGenerado = idGenerado; //este es el valor de id factura que me servirá para pasarselo al JasperReports y genere la factura de ese id de factura
+         }
+         
+        }
+    }catch (SQLException e){
+        JOptionPane.showMessageDialog(null, "Error en la base de datos" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        throw e;
+    } 
+        //Este valor me servirá para mi tabla detalle factura mientras que la variable de instancia ultimoFacturaIdGenerado me servirá para pasarle el id de la factura que se acaba de generar a Jasper para que la genere
+        return idGenerado;
+}
+
+public void guardarDetalleFactura(long idFacturaCorrespondiente) throws SQLException{
+    DefaultTableModel modelo = (DefaultTableModel) tblPedido.getModel();
+    String qry = "INSERT INTO public.detalle_factura (factura_id, producto_id, cantidad, precio_unitario, importe) VALUES (?,?,?,?,?)";
+    int numFilas = modelo.getRowCount();
+    
+    if (numFilas == 0){
+        return;
+    }
+    
+    try (PreparedStatement ps= con.prepareStatement(qry)){
+        
+    for (int i=0; i<numFilas; i++){
+    int productoId= Integer.parseInt(modelo.getValueAt(i, 0).toString());
+    int cantidad= Integer.parseInt(modelo.getValueAt(i, 2).toString());
+    BigDecimal precioUnitario = new BigDecimal (modelo.getValueAt(i, 3).toString());
+    BigDecimal importe = new BigDecimal (modelo.getValueAt(i, 4).toString());
+    
+    
+    ps.setLong(1, idFacturaCorrespondiente);
+    ps.setInt(2, productoId);
+    ps.setInt(3, cantidad);
+    ps.setBigDecimal(4, precioUnitario);
+    ps.setBigDecimal(5, importe);  
+    ps.addBatch();
+    }
+    ps.executeBatch();
+    }catch (SQLException e){
+        JOptionPane.showMessageDialog(null, "Error en la base de datos" + e, "Error DB", JOptionPane.ERROR_MESSAGE);
+        throw e;
+        }catch (NumberFormatException e){
+            JOptionPane.showMessageDialog(null, "Error en la base de datos durante el Batch" + e.getMessage(), "ERROR DB", JOptionPane.ERROR_MESSAGE);
+            throw new RuntimeException("Error en el formato de datos", e);      
+    }
 }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarCliente;
