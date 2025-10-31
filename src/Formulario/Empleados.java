@@ -34,7 +34,7 @@ public class Empleados extends javax.swing.JInternalFrame {
             con = conexionPostgres.getConexion();
             
         }catch (SQLException e){
-            e.getMessage();
+            e.getMessage();  //logger.log(Level.SEVERE, "Error al conectar a la base de datos", e);
         }
     }
 
