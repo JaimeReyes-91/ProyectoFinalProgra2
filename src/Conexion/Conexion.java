@@ -35,19 +35,9 @@ public class Conexion {
     //String jndi=null; // se utiliza cuando JNDI
     
     public Conexion(){
-<<<<<<< HEAD
 
-<<<<<<< HEAD
-
-=======
->>>>>>> ramon
         String path = "C:\\Users\\Coloc\\OneDrive\\Escritorio\\Proyecto Progra II\\ProyectoFinalProgra2\\src\\Conexion\\db_config.properties";
 
-=======
-        String path = "C:\\Users\\dinae\\OneDrive\\Documentos\\NetBeansProjects\\ProyectoFinal\\src\\Conexion\\db_config.properties";
->>>>>>> 7667ccca657ebef9d6c4506284cc07fc9b09ed0c
-
-        InputStream in=null;
         
         try{
             in = Files.newInputStream(Paths.get(path));
