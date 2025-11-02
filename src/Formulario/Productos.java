@@ -64,6 +64,7 @@ public class Productos extends javax.swing.JInternalFrame {
         btnBaja = new javax.swing.JButton();
         btnConsultar = new javax.swing.JButton();
         btnLimpiar1 = new javax.swing.JButton();
+        btnCerrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Productos");
@@ -187,6 +188,13 @@ public class Productos extends javax.swing.JInternalFrame {
             }
         });
 
+        btnCerrar.setText("Cerrar");
+        btnCerrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCerrarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -199,12 +207,14 @@ public class Productos extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnAlta)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnActualizar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnBaja))
+                        .addComponent(btnActualizar))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(165, 165, 165)
                         .addComponent(btnLimpiar1)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnCerrar)
+                    .addComponent(btnBaja))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -216,9 +226,11 @@ public class Productos extends javax.swing.JInternalFrame {
                     .addComponent(btnActualizar)
                     .addComponent(btnBaja)
                     .addComponent(btnConsultar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnLimpiar1)
-                .addContainerGap(11, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnLimpiar1)
+                    .addComponent(btnCerrar))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -427,6 +439,14 @@ switch (categoriaSeleccionada) {
         limpiar();
     }//GEN-LAST:event_btnLimpiar1ActionPerformed
 
+    private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
+      try {
+        this.dispose(); // Cierra solo este JInternalFrame
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    }//GEN-LAST:event_btnCerrarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -456,6 +476,7 @@ switch (categoriaSeleccionada) {
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnAlta;
     private javax.swing.JButton btnBaja;
+    private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnConsultar;
     private javax.swing.JButton btnLimpiar1;
     private javax.swing.JComboBox<String> cmbCategoria;
