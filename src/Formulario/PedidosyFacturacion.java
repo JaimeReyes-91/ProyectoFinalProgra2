@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 
-//version ramon si srive
+//version ramon si  aaahahahahashahahah
 package Formulario;
 
 
