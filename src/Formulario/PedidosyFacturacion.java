@@ -1,4 +1,3 @@
-
 package Formulario;
 
 
@@ -21,7 +20,7 @@ import java.text.SimpleDateFormat;
 import javax.swing.text.DateFormatter;
 
 
-import java.math.RoundingMode; // Necesario para redondear a dos decimales
+import java.math.RoundingMode; 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
 
@@ -30,7 +29,6 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import java.math.RoundingMode;
 
-//los que yo puse
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +48,7 @@ import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import net.sf.jasperreports.engine.JRException;
+import proyectofinal.SesionUsuario;
 
 /**
  *
@@ -63,9 +62,7 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PedidosyFacturacion.class.getName());
 
-    /**
-     * Creates new form PedidosyFacturacion
-     */
+   
     private DefaultTableModel modeloTabla; 
     
     public PedidosyFacturacion(JDesktopPane escritorio) throws SQLException {
@@ -74,27 +71,20 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
         inicializarTablaPedido();
         configurarListenerTabla();
         this.escritorioPrincipal = escritorio;
-        
+        txtIdEmpleado.setText(String.valueOf(SesionUsuario.getIdUsuario()));
     }
     
-
-    
-    // LISTA INTERNA: Para guardar los objetos que luego irán a la BD (opcional, pero buena práctica)
-    // private List<LineaPedido> lineasDePedido = new ArrayList<>(); 
-
     private void inicializarTablaPedido() {
-        // 1. Definir las columnas de la tabla (las que irán al Detalle de Factura)
+   
         String[] columnas = {"ID Producto", "Producto", "Cantidad", "Precio Unitario", "Importe"};
-        
-        // 2. Crear el modelo con 0 filas (empieza vacío)
+       
         modeloTabla = new DefaultTableModel(columnas, 0) {
-            // Esto asegura que las celdas no puedan ser editadas directamente (solo la cantidad, si queres)
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 2; // Permitir edición solo en la columna "Cantidad" (índice 2)
+                return column == 2; 
             }
         };    
-        // 3. Asignar el modelo al componente JTable
+        
         tblPedido.setModel(modeloTabla);
     }
 
@@ -402,15 +392,16 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
                         .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.TRAILING))
                     .addComponent(lblCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
-                    .addComponent(cmbProductos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(txtCantidad)
-                        .addComponent(btnAnadir)))
+                        .addComponent(btnAnadir))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel9)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2)
+                        .addComponent(cmbProductos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton2)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -594,44 +585,36 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnAgregarClienteActionPerformed
 
     private void txtDescuentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDescuentoActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_txtDescuentoActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        // TODO add your handling code here:
+        
         calcularRecargoYTotales();
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void btnEliminarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarProductoActionPerformed
-        // TODO add your handling code here:
-        //obtener el modelo de la tabla
+
         DefaultTableModel modelo = (DefaultTableModel) tblPedido.getModel();
         
-        //obtener el índice de la fila seleccionada por el usuario
         int filaSeleccionada = tblPedido.getSelectedRow();
         
-        //verificar si el usuario selecciono una fila
         if (filaSeleccionada >= 0){
-            //si la fila ee mayor o igual a 0 ssignifica que está en una posición válida, porque el conteo empieza en 0, entonces se elimina
             modelo.removeRow(filaSeleccionada);
-            
-            //llamar a las funciones para recalcular los totales:
+           
             calcularYActualizarSubTotal();
             calcularRecargoYTotales();   
-    } else{
-            //notificar al usuario si no selecciono nada:
+    } else{            
             JOptionPane.showMessageDialog(this, "Selecciona la fila del producto que desea eliminar", "Advertencia", JOptionPane.WARNING_MESSAGE );
         }
     }//GEN-LAST:event_btnEliminarProductoActionPerformed
 
     private void txtIdEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdEmpleadoActionPerformed
-        // TODO add your handling code here:
-        //calcularRecargoYTotales();
-        //calcularYActualizarSubTotal();
+        
     }//GEN-LAST:event_txtIdEmpleadoActionPerformed
 
     private void btnCalcularDescuentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcularDescuentoActionPerformed
-        // TODO add your handling code here:
+       
         calcularRecargoYTotales();
         calcularYActualizarSubTotal();
     }//GEN-LAST:event_btnCalcularDescuentoActionPerformed
@@ -691,28 +674,20 @@ public class ReportUtils {
  
         
 try {
-            // 1. Verifcar si el archivo JRXML existe
             InputStream stream = ReportUtils.class.getResourceAsStream(ruta);
             if (stream == null) {
-                // Si el archivo no se encuentra, lanzamos una excepción 
+
                 throw new IllegalArgumentException("No se encontró el archivo del reporte: " + ruta);
             }
 
-            // 2. Compilar el reporte JRXML a JasperReport
             JasperReport report = JasperCompileManager.compileReport(stream);
-
-            // 3. Llenar el reorte (Ejecutar el Query SQL)
-            // Se pasa la lista de parametros que puede estar vacía o contener el i d
             JasperPrint print = JasperFillManager.fillReport(report, parametros , con);
-
-            // 4. Mostrar el reporte en el JDesktopPane
             JRViewer viewer = new JRViewer(print);
 
-            //Limpiar y mostrar el nuevo report en el escritorio
             escritorio.removeAll();
             escritorio.add(viewer);
             viewer.setBounds(0, 0, escritorio.getWidth(), escritorio.getHeight());
-            viewer.setVisible(true); // Asegurar visibilidad
+            viewer.setVisible(true); 
             escritorio.revalidate();
             escritorio.repaint(); 
             
@@ -721,23 +696,18 @@ try {
                 stream.close();
                 }
                 } catch (IOException ex) {
-                // Manejo de la excpción de cierre
             }
 
-        } catch (JRException e) {
-            // Error específico de JasperReports compilación, llenado
+        } catch (JRException e) {            
             JOptionPane.showMessageDialog(null, "Error de JasperReports: " + e.getMessage(), "Error en Reporte", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(ReportUtils.class.getName()).log(Level.SEVERE, "Error en el motor de reportes", e);
-        } catch (IllegalArgumentException e) {
-             // Error si el archivo no existe
+        } catch (IllegalArgumentException e) {            
              JOptionPane.showMessageDialog(null, e.getMessage(), "Error de Ruta", JOptionPane.ERROR_MESSAGE);
-        } catch (Exception e) {
-            // Cualquier otro error inesperado IO, etc.
+        } catch (Exception e) {            
             JOptionPane.showMessageDialog(null, "Error al generar reporte: " + e.getMessage(), "Error Desconocido", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(ReportUtils.class.getName()).log(Level.SEVERE, "Error desconocido al generar reporte", e);
         }
     }
-
 }
  
     
@@ -766,10 +736,7 @@ try {
     txtDescuento.setText("");
     lblsubTotalPedido.setText("");
     lblTotalPedido.setText("");
-    
-    //resetear el ultimo id generado de factura
     this.ultimoFacturaIdGenerado = 0;
-    // moverse al txt Nit
     txtNit.requestFocus();
     
     }//GEN-LAST:event_btnNuevoPedidoActionPerformed
@@ -792,8 +759,7 @@ try {
         String nombreProducto = cmbProductos.getSelectedItem().toString();
         
         String qry= "SELECT producto_id FROM productos WHERE nombre_producto = ?";
-   
-        // Uso de try-with-resources para cerrar PreparedStatement y ResultSet automáticamente
+
         try (PreparedStatement ps = con.prepareStatement (qry)){
         ps.setString(1, nombreProducto);
         
@@ -807,12 +773,10 @@ try {
         JOptionPane.showMessageDialog(null, "Error en la base de datos:" + e.getMessage());
         e.printStackTrace();    
         }
-        return idProducto;  // El método devuelve el valor entero (0 si hubo error o no se encontró)
+        return idProducto;  
 }
     
-    public String getnombreProducto(){
-        //String nombreProducto = ("No encontrado") ;
-   
+    public String getnombreProducto(){           
             String nombreProducto = cmbProductos.getSelectedItem().toString();
    return nombreProducto;
         
@@ -829,7 +793,6 @@ try {
             return 0;
         }
     } catch (NumberFormatException e) {
-        // Capturar si txtCantidad no es un número válido
         JOptionPane.showMessageDialog(null, "Error: Ingrese una cantidad válida (solo números enteros).", "Error de Entrada", JOptionPane.ERROR_MESSAGE);
         return 0;    
     }
@@ -837,7 +800,7 @@ try {
             }
             
     public double getprecioUnitario() throws SQLException{
-        double precioUnitario = 0; //valor por defecto por si no se encuentra 
+        double precioUnitario = 0; 
         
         try{
             String nombreProducto = cmbProductos.getSelectedItem().toString();
@@ -859,7 +822,7 @@ try {
         return precioUnitario;
     }  
     
-    public double calcularImporte() throws SQLException { // Cambia el retorno a double
+    public double calcularImporte() throws SQLException { 
     
     
     double preciounitarioImporte = 0.0;
@@ -869,10 +832,8 @@ try {
     try {
         String nombreproductoImporte = cmbProductos.getSelectedItem().toString();
         
-        // Captura NumberFormatException aquí
-        cantidadImporte = Integer.parseInt(txtCantidad.getText()); 
-        
-        // Comprobar que la cantidad sea positiva
+        cantidadImporte = Integer.parseInt(txtCantidad.getText());         
+       
         if (cantidadImporte <= 0) {
             JOptionPane.showMessageDialog(null, "La cantidad debe ser mayor a cero.", "Error", JOptionPane.ERROR_MESSAGE);
             return 0.0;
@@ -885,22 +846,18 @@ try {
             
             try (ResultSet rs = ps.executeQuery()) {
                 
-                if (rs.next()) {
-                    //Usar rs.getDouble() y asignar a double
+                if (rs.next()) {                    
                     preciounitarioImporte = rs.getDouble("precio"); 
                 } else {
-                    // Manejar producto no encontrado
                     JOptionPane.showMessageDialog(null, "Error: Producto '" + nombreproductoImporte + "' no encontrado.", "Error BD", JOptionPane.ERROR_MESSAGE);
                     return 0.0;
                 }
             }
         }
         
-        //CÁLCULO FINAL
         importe = preciounitarioImporte * cantidadImporte;
         
     } catch (NumberFormatException e) {
-        // Capturar si txtCantidad no es un número válido
         JOptionPane.showMessageDialog(null, "Error: Ingrese una cantidad válida (solo números enteros).", "Error de Entrada", JOptionPane.ERROR_MESSAGE);
         return 0.0;
     } catch (SQLException e) {
@@ -955,36 +912,25 @@ try {
         }); 
     }
 
-    public void calcularYActualizarSubTotal(){
-        //1) Inicializar el acumulador en 0, con el método BigDecimal.ZERO
+    public void calcularYActualizarSubTotal(){        
         BigDecimal subTotal= BigDecimal.ZERO;
         
-        // Obtener el modelo de la tabla (Siempre debe hacerse casting a DefaultTableModel para aparte de poder leer datos, manipularlos como insertar y eliminar)
         DefaultTableModel modelo = (DefaultTableModel) tblPedido.getModel();
         
         int numFilas = modelo.getRowCount();
         if (numFilas == 0){
-            // si no hay productos el subtotal es 0
             lblsubTotalPedido.setText("0.00");
             return;
         }
-        try{
-            //2 iterar sobre todas las filas del Jtable
-            for (int i=0; i < numFilas; i++){
-                //3Obtener el valor de la columna importe, indice 4
-            Object valorImporte = modelo.getValueAt(i, 4);
-            
-            //) Convertir el valor a String y luego a Big Decimal 
+        try{            
+            for (int i=0; i < numFilas; i++){                
+            Object valorImporte = modelo.getValueAt(i, 4);            
+           
             BigDecimal importeFila = new BigDecimal(valorImporte.toString());
-            //5 sumar el importe de la linea al subtotal general
             subTotal = subTotal.add(importeFila);
             }
-            //6 redondear el subtotal a 2 decimales para mostrarlo, RoundingMode.HALF_UP es el redondeo estándar (al más cercano)
             BigDecimal subTotalFinal = subTotal.setScale(2, RoundingMode.HALF_UP);
-            // 7 Formatear y actualizar el label de subtotal
-            lblsubTotalPedido.setText(subTotalFinal.toString());
-            
-
+            lblsubTotalPedido.setText(subTotalFinal.toString());            
   
         }catch (NumberFormatException e){
             JOptionPane.showMessageDialog(this, "Error de formato en el importe de la tabla. Revise la Columna de totales:" + e.getMessage(), "Error de cálculo", JOptionPane.ERROR_MESSAGE);
@@ -994,19 +940,16 @@ try {
 public void calcularRecargoYTotales() {
     
     // Constantes
-    final BigDecimal TASA_ADICIONAL = new BigDecimal("0.05"); // 5%
-    final BigDecimal TASA_IVA = new BigDecimal("0.12"); // Asumiendo 12% de IVA
+    final BigDecimal TASA_ADICIONAL = new BigDecimal("0.05"); 
+    final BigDecimal TASA_IVA = new BigDecimal("0.12"); 
     
-    // 1 Obtener los valores base (con manejo de errores)
     BigDecimal subTotal;
     BigDecimal descuentoManual;
     
     try {
-        // Obtenemos SubTotal del Label
-        subTotal = new BigDecimal(lblsubTotalPedido.getText());
+        subTotal = new BigDecimal(lblsubTotalPedido.getText());        
         
-        // Obtenemos Descuento Manual del TextField (si está vacío, asumimos 0)
-        String descTextInput = txtDescuento.getText(); //.isEmpty() ? "0.00" : txtDescuento.getText();
+        String descTextInput = txtDescuento.getText();
         String descTextUsable = descTextInput;
         if (descTextInput == null || descTextInput.trim().isEmpty()){
             descTextUsable = "0";
@@ -1016,35 +959,24 @@ public void calcularRecargoYTotales() {
         
     } catch (NumberFormatException e) {
         JOptionPane.showMessageDialog(this, "Error: SubTotal o Descuento Manual no es un número válido.", "Error de Datos", JOptionPane.ERROR_MESSAGE);
-        return; // Detiene el cálculo si hay error
+        return; 
     }
-
-    // 2 Calcular Recargo/Descuento por Método de Pago
+  
     BigDecimal ajustePorPago = BigDecimal.ZERO;
     String metodo = (String) jComboBox1.getSelectedItem();
 
     if ("Tarjeta".equals(metodo)) {
-        // Recargo: se suma el 5% al subtotal
         ajustePorPago = subTotal.multiply(TASA_ADICIONAL).setScale(2, RoundingMode.HALF_UP);
     } else if ("Efectivo".equals(metodo)) {
-        // Descuento: se resta el 5% del subtotal
-        // Nota el signo negativo: el cálculo final lo restará.
         ajustePorPago = subTotal.multiply(TASA_ADICIONAL).setScale(2, RoundingMode.HALF_UP).negate();
     }
-    
-    // 3 Actualizar el JLabel de Recargo (jLabel8) con el valor (positivo o negativo)
-    // Usamos abs() para mostrar el valor absoluto del ajuste
     jLabel8.setText(ajustePorPago.abs().toString()); 
     
-    // 4 Calcular la Base Imponible, SubTotal - Descuento Manual + Ajuste por Pago
-    // Nota: ajustePorPago es negativo si es descuento.
-    BigDecimal baseImponible = subTotal.subtract(descuentoManual).add(ajustePorPago); 
-    
-    // 5 Calcular iva
+    BigDecimal baseImponible = subTotal.subtract(descuentoManual).add(ajustePorPago);  
+  
     BigDecimal iva = baseImponible.multiply(TASA_IVA).setScale(2, RoundingMode.HALF_UP);
-    lblIva.setText(iva.toString());
-    
-    // 6. Calcular total a pagar
+    lblIva.setText(iva.toString());    
+   
     BigDecimal totalFinal = baseImponible.add(iva).setScale(2, RoundingMode.HALF_UP);
     lblTotalPedido.setText(totalFinal.toString());
 }
@@ -1053,8 +985,8 @@ public void configurarListenerTabla() {
     
     // Indices de columnas 
     final int COL_CANTIDAD = 2; 
-    final int COL_PRECIO = 3;    // Precio unitario
-    final int COL_IMPORTE = 4;   // Importe total (Cantidad * Precio)
+    final int COL_PRECIO = 3;    
+    final int COL_IMPORTE = 4;   
     
     DefaultTableModel modelo = (DefaultTableModel) tblPedido.getModel();
     
@@ -1063,44 +995,33 @@ public void configurarListenerTabla() {
         @Override
         public void tableChanged(TableModelEvent e) {
             
-            // 1. Verificación para asegurarse de que el cabio fue una edición de una celda
+            
             if (e.getType() == TableModelEvent.UPDATE) {
                 
                 int fila = e.getFirstRow();
                 int columna = e.getColumn();
                 
-                // 2. Verificación par solo actuar si la columna editada es la de CANTIDAD
                 if (columna == COL_CANTIDAD) {
                     
                     try {
-                        // A. Obtener los datos necesarios
                         String strCantidad = modelo.getValueAt(fila, COL_CANTIDAD).toString();
                         String strPrecio = modelo.getValueAt(fila, COL_PRECIO).toString();
                         
-                        // b. Conversión a bigecimal
                         BigDecimal cantidad = new BigDecimal(strCantidad);
                         BigDecimal precio = new BigDecimal(strPrecio);
                         
-                        // C. Calcular el nuevo importe de la fila
                         BigDecimal nuevoImporte = cantidad.multiply(precio).setScale(2, RoundingMode.HALF_UP);
                         
-                        // D. Actulizar la celda importe
-                        // Esto no dispara otro evento de TableModelEvent.UPDATE
                         modelo.setValueAt(nuevoImporte.toString(), fila, COL_IMPORTE); 
                         
-                        // E) Recalcular totales globales
-                        // El Subtotal, recargo, iva y total deben actualizarse con el nuevo importe
                         calcularYActualizarSubTotal();
                         calcularRecargoYTotales();
                         
                     } catch (NumberFormatException ex) {
-                        // Si el usuario introduce texto inválido en la cantidad
                         JOptionPane.showMessageDialog(null, "La cantidad introducida no es un número válido.", "Error de Entrada", JOptionPane.ERROR_MESSAGE);
-                        //Revertir la celda a 1 para evitar un cálculo erróneo
                         modelo.setValueAt("1", fila, COL_CANTIDAD); 
                         
                     } catch (Exception ex) {
-                         // Manejo de mas errores
                          JOptionPane.showMessageDialog(null, "Error al recalcular la fila: " + ex.getMessage());
                     }
                 }
@@ -1109,50 +1030,36 @@ public void configurarListenerTabla() {
     });
 }
 
-public String obtenerYSaltarSiguienteNumeroSerie() throws SQLException{
-    //SQL obtener obtener el último número y bloquear la fila 
+public String obtenerYSaltarSiguienteNumeroSerie() throws SQLException{    
     String select_for_update = "SELECT ultimo_numero_factura FROM contador_facturas WHERE id = 1 FOR UPDATE";
     
-    //Query sql para aumetnar y guardar el nuevo número
     String update_sql = "UPDATE contador_facturas SET ultimo_numero_factura = ? WHERE id = 1";
     
-    long siguienteNumero = 0;
-    
-    //Formato deseado para 
+    long siguienteNumero = 0;    
+   
     DecimalFormat formatoSerie = new DecimalFormat("000000000");
-    
-    //crucial 1 Desactivar el autocommit para manejar la transacción manualmente
     boolean autoCommitOriginal = con.getAutoCommit();
     con.setAutoCommit(false);
     
     try(PreparedStatement selectPs = con.prepareStatement(select_for_update);
         PreparedStatement updatePs = con.prepareStatement(update_sql);
     ){
-        // 1 Obtener el último número y bloquear la fila, si otro susario intenta esta línea al msimo tiempo, esperará hasta que la transacción actual (este bloque) termine
+       
         ResultSet rs = selectPs.executeQuery();
         if (rs.next()){
             long ultimoNumero = rs.getLong("ultimo_numero_factura");
             siguienteNumero = ultimoNumero + 1;
             updatePs.setLong(1, siguienteNumero);
                 updatePs.executeUpdate();
-                // confirmar la transacción y libera el bloqueo del for update
-                //con.commit();
-        } else{
-            //en el casod de que aún no exista el contador osea el primer registro de numero de serie
-            siguienteNumero = 1;
-            //String insertQry = "INSERT INTO contador_facturas (id, ultimo_numero_factura) VALUES (1,1)";
-            //try (PreparedStatement insertPs = con.prepareStatement(insertQry)){
-            // 2 Actualizar el contador en la base de datos con el nuevo valor
+                
+        } else{            
+            siguienteNumero = 1;            
             updatePs.setLong(1, siguienteNumero);
-                updatePs.executeUpdate();
-                // confirmar la transacción y libera el bloqueo del for update
-                //con.commit();
+                updatePs.executeUpdate();                
             }
-        } catch (SQLException e){
-                    //si falla restaurar los cambios y volver al estado anterior 
+        } catch (SQLException e){                    
                     con.rollback();
                     } finally {
-                    // crucial 2 restaurar el autocommit
                     con.setAutoCommit(autoCommitOriginal); 
     }
     return formatoSerie.format(siguienteNumero);
@@ -1176,7 +1083,7 @@ public long getIdCliente()throws SQLException{
     try (PreparedStatement ps = con.prepareStatement(qry)){
     ps.setString(1, nitParaBusqueda);
     
-    try (ResultSet rs= ps.executeQuery()){ //se usa executeQuery por la clausula RETURNING del query, que trata al query como un select más allá de un insert
+    try (ResultSet rs= ps.executeQuery()){ 
     if (rs.next()){
         clienteId = rs.getLong("cliente_id");
     } else {
@@ -1195,7 +1102,6 @@ public long guardarFactura(String numeroSerie)throws SQLException{
     long empleadoId = 0;
     BigDecimal total = null;
     BigDecimal subTotal = null;
-    //BigDecimal descuento = null;
     String txtDescInput = null;
     String txtDescUsable = null;
     BigDecimal iva = null;
@@ -1210,7 +1116,6 @@ public long guardarFactura(String numeroSerie)throws SQLException{
     empleadoId = Long.parseLong(txtIdEmpleado.getText());
     total = new BigDecimal(lblTotalPedido.getText());
     subTotal = new BigDecimal (lblsubTotalPedido.getText());
-    //descuento = new BigDecimal (txtDescuento.getText());
     
     txtDescInput = txtDescuento.getText();
     txtDescUsable = txtDescInput;
@@ -1239,11 +1144,11 @@ public long guardarFactura(String numeroSerie)throws SQLException{
         ps.setBigDecimal(7, iva);
         ps.setString(8, formaPago);
         
-        try (ResultSet rs = ps.executeQuery()){ //se usa executeQuery por la clausula RETURNING del query, que trata al query como un select más allá de un insert
+        try (ResultSet rs = ps.executeQuery()){ 
             
          if (rs.next()){
          idGenerado = rs.getLong("factura_id");
-         this.ultimoFacturaIdGenerado = idGenerado; //este es el valor de id factura que me servirá para pasarselo al JasperReports y genere la factura de ese id de factura
+         this.ultimoFacturaIdGenerado = idGenerado; 
          }
          
         }
@@ -1251,7 +1156,6 @@ public long guardarFactura(String numeroSerie)throws SQLException{
         JOptionPane.showMessageDialog(null, "Error en la base de datos" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         throw e;
     } 
-        //Este valor me servirá para mi tabla detalle factura mientras que la variable de instancia ultimoFacturaIdGenerado me servirá para pasarle el id de la factura que se acaba de generar a Jasper para que la genere
         return idGenerado;
 }
 
@@ -1300,15 +1204,12 @@ public class inventarioDAO{
         int filas = modelo.getRowCount();
         int stockActual = 0;
         
-        //1. Recorreer la tabla de pedidos:
         for (int i=0; i < filas; i++){
             
-            //obtener los datos de la fila del Jtable
             int productoId = (int) modelo.getValueAt(i, 0);
             String nombreProducto = (String) modelo.getValueAt(i, 1);
             int cantidadComprar = (int) modelo.getValueAt(i, 2);
             
-            //Paso de validacion de Stock
             try(PreparedStatement psSelect = con.prepareStatement(selectStock)){
                 psSelect.setInt(1, productoId);
                 
@@ -1316,10 +1217,8 @@ public class inventarioDAO{
                     if (rs.next()){
                         stockActual = rs.getInt("stock");
                         
-                        // validar si el stock es suficiente
                         if (stockActual < cantidadComprar){
                             int faltante = cantidadComprar - stockActual;
-                            // si esto pasa lanzar un excepcio
                             throw new  Exception ("Stock insuficiente. El producto " + nombreProducto + "Solo tiene" + stockActual + "unidades disponibles ");
                         }
                     } else{
@@ -1329,10 +1228,7 @@ public class inventarioDAO{
                 
             }
             
-            //Actualizacion de inventario 
-            // determinar el nuevo stock y la disponibilidad
             int nuevoStock = stockActual - cantidadComprar; 
-            //Disponibilidad será true si el nuevo stock eso mayor a 0
             boolean nuevaDisponibilidad = nuevoStock > 0;
             try(PreparedStatement psUpdate= con.prepareStatement(updateStock)){
                 psUpdate.setInt(1, cantidadComprar);
@@ -1341,7 +1237,7 @@ public class inventarioDAO{
                 psUpdate.executeUpdate();         
             }
         }
-        return true; // todo el inventario se actualizó corerectamente    
+        return true;
 }
 }
 

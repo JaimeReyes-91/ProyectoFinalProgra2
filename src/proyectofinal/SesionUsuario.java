@@ -28,4 +28,5 @@ public class SesionUsuario {
     public static int getIdUsuario() {
         return idUsuario;
     }
+    
 }
