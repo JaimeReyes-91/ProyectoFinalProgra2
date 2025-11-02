@@ -19,11 +19,6 @@ import javax.swing.text.DateFormatter;
 import proyectofinal.SesionUsuario;
 
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> e5da188edb97be742e1e8cc8d7a9148ca3383a33
 public class Cliente extends javax.swing.JInternalFrame {
 
     Conexion conexionPostgres = new Conexion();
@@ -274,7 +269,7 @@ public class Cliente extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtDireccionActionPerformed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-        if (!SesionUsuario.sesionActiva()) {
+        if (!SesionUsuario.isSesionActiva()) {
         JOptionPane.showMessageDialog(this, 
             "Debe iniciar sesión antes de realizar un registro.",
             "Acceso denegado",

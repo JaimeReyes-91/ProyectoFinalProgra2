@@ -30,12 +30,16 @@ public class Login extends javax.swing.JInternalFrame {
         this.mainRef = mainRef;
         setTitle("Login");
         
+        
         try{
             con = conexionPostgres.getConexion();
+            
             
         }catch (SQLException e){
             JOptionPane.showMessageDialog(this, "Error de conexión: " + e.getMessage());
         }
+        SwingUtilities.invokeLater(() -> txtUsuario.requestFocusInWindow());
+        getRootPane().setDefaultButton(btnIniciarSesion);
     }
     
     @SuppressWarnings("unchecked")
@@ -143,7 +147,9 @@ public class Login extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
+        
         try { 
+        
         String nombreUsuarioIngresado = txtUsuario.getText().trim();
         String claveIngresada = txtClave.getText().trim();
 

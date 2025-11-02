@@ -76,25 +76,13 @@ public class Main extends javax.swing.JFrame {
     }
     
     public void actualizarUsuarioActivo() {
-        if (SesionUsuario.sesionActiva()) {
+        if (SesionUsuario.isSesionActiva()) {
             lblUsuario.setText("Usuario activo: " + SesionUsuario.getUsuarioActual());
         } else {
             lblUsuario.setText("No hay sesión activa");
         }
     }
-/*
-   private void ItemInicioActionPerformed(java.awt.event.ActionEvent evt) {
-        Login loginFrame = new Login(this);
-        mostrarVentana(loginFrame);
-    }
 
-   private void ItemCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {
-        SesionUsuario.cerrarSesion();
-        JOptionPane.showMessageDialog(this, "Sesión finalizada correctamente.");
-        actualizarUsuarioActivo();
-        bloquearMenus();
-    }
-    */
     private void mostrarVentana(JInternalFrame frame) {
         escritorio.removeAll();
         escritorio.repaint();
@@ -196,7 +184,7 @@ public class Main extends javax.swing.JFrame {
         crudUsuarios = new javax.swing.JMenuItem();
         MenuPedidos = new javax.swing.JMenu();
         itemNuevoPedido = new javax.swing.JMenuItem();
-        jMenuItem9 = new javax.swing.JMenuItem();
+        itemVerPedidos = new javax.swing.JMenuItem();
         MenuReportes = new javax.swing.JMenu();
         repEmpleados = new javax.swing.JMenuItem();
         repProductos = new javax.swing.JMenuItem();
@@ -327,8 +315,13 @@ public class Main extends javax.swing.JFrame {
         });
         MenuPedidos.add(itemNuevoPedido);
 
-        jMenuItem9.setText("Ver pedidos");
-        MenuPedidos.add(jMenuItem9);
+        itemVerPedidos.setText("Ver pedidos");
+        itemVerPedidos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemVerPedidosActionPerformed(evt);
+            }
+        });
+        MenuPedidos.add(itemVerPedidos);
 
         jMenuBar1.add(MenuPedidos);
 
@@ -422,8 +415,22 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void ItemInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ItemInicioActionPerformed
+        if (SesionUsuario.isSesionActiva()) {
+            JOptionPane.showMessageDialog(this, 
+            SesionUsuario.getUsuarioActual() + " tiene una sesión activa.");
+    } else {
         Login login = new Login(this);
-        mostrarVentana(login);
+        escritorio.removeAll();
+        escritorio.repaint();
+        escritorio.add(login);
+
+        int x = (escritorio.getWidth() - login.getWidth()) / 2;
+        int y = (escritorio.getHeight() - login.getHeight()) / 2;
+        login.setLocation(x, y);
+
+        login.setVisible(true);
+}
+
 
     }//GEN-LAST:event_ItemInicioActionPerformed
 
@@ -480,6 +487,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_repUsuariosActionPerformed
 
     private void ItemCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ItemCerrarSesionActionPerformed
+        
         SesionUsuario.cerrarSesion();
         JOptionPane.showMessageDialog(this, "Sesión finalizada correctamente.");
         actualizarUsuarioActivo();
@@ -490,6 +498,10 @@ public class Main extends javax.swing.JFrame {
     private void itemSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemSalirActionPerformed
         System.exit(0);
     }//GEN-LAST:event_itemSalirActionPerformed
+
+    private void itemVerPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemVerPedidosActionPerformed
+        mostrarVentana(new HistorialPedidos());
+    }//GEN-LAST:event_itemVerPedidosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -518,13 +530,13 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JDesktopPane escritorio;
     private javax.swing.JMenuItem itemNuevoPedido;
     private javax.swing.JMenuItem itemSalir;
+    private javax.swing.JMenuItem itemVerPedidos;
     private javax.swing.JMenu jMenu6;
     private javax.swing.JMenu jMenu7;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem20;
     private javax.swing.JMenuItem jMenuItem23;
-    private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblUsuario;
     private javax.swing.JMenuItem repClientes;

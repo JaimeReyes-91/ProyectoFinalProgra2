@@ -1,6 +1,4 @@
-
 package proyectofinal;
-
 
 public class SesionUsuario {
     private static int idUsuario;
@@ -19,11 +17,15 @@ public class SesionUsuario {
         sesionActiva = false;
     }
 
-    public static boolean sesionActiva() {
+    public static boolean isSesionActiva() {
         return sesionActiva;
     }
 
     public static String getUsuarioActual() {
         return usuarioActual;
+    }
+
+    public static int getIdUsuario() {
+        return idUsuario;
     }
 }
