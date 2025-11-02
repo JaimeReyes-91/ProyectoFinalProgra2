@@ -2,18 +2,13 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-<<<<<<< HEAD
         <group>
-            <file>file:/C:/Users/Coloc/OneDrive/Escritorio/Proyecto%20Progra%20II/ProyectoFinalProgra2/src/Formulario/PedidosyFacturacion.java</file>
-<<<<<<< HEAD
-            <file>file:/C:/Users/Coloc/OneDrive/Escritorio/Proyecto%20Progra%20II/ProyectoFinalProgra2/src/Reportes/jrEmpleados.jrxml</file>
-            <file>file:/C:/Users/Coloc/OneDrive/Escritorio/Proyecto%20Progra%20II/ProyectoFinalProgra2/src/Formulario/Cliente.java</file>
-            <file>file:/C:/Users/Coloc/OneDrive/Escritorio/Proyecto%20Progra%20II/ProyectoFinalProgra2/src/Conexion/Conexion.java</file>
-=======
->>>>>>> ramon
+            <file>file:/C:/Users/dinae/OneDrive/Documentos/NetBeansProjects/ProyectoFinal/src/Formulario/Cliente.java</file>
+            <file>file:/C:/Users/dinae/OneDrive/Documentos/NetBeansProjects/ProyectoFinal/src/Formulario/Reportes.java</file>
+            <file>file:/C:/Users/dinae/OneDrive/Documentos/NetBeansProjects/ProyectoFinal/src/Formulario/Proveedor.java</file>
+            <file>file:/C:/Users/dinae/OneDrive/Documentos/NetBeansProjects/ProyectoFinal/src/Formulario/Productos.java</file>
+            <file>file:/C:/Users/dinae/OneDrive/Documentos/NetBeansProjects/ProyectoFinal/src/Formulario/PedidosyFacturacion.java</file>
+            <file>file:/C:/Users/dinae/OneDrive/Documentos/NetBeansProjects/ProyectoFinal/src/Formulario/Empleados.java</file>
         </group>
-=======
-        <group/>
->>>>>>> 7667ccca657ebef9d6c4506284cc07fc9b09ed0c
     </open-files>
 </project-private>
