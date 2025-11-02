@@ -19,6 +19,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
@@ -116,6 +118,40 @@ public class Main extends javax.swing.JFrame {
 
             JasperReport report = JasperCompileManager.compileReport(stream);
             JasperPrint print = JasperFillManager.fillReport(report, null, con);
+
+            JRViewer viewer = new JRViewer(print);
+            escritorio.removeAll();
+            escritorio.add(viewer);
+            viewer.setBounds(0, 0, escritorio.getWidth(), escritorio.getHeight());
+            escritorio.revalidate();
+            escritorio.repaint();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al generar reporte: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    public static void mostrarReporteFac(String ruta, Connection con, JDesktopPane escritorio, long idFactura) {
+        
+        // 1. Crear el mapa de parámetros
+        Map<String, Object> parametros = new HashMap<>();
+        
+        // 2. Insertar el ID de la factura en el mapa
+        // La clave ("factura_id") DEBE coincidir con $P{factura_id} de tu JRXML
+        parametros.put("factura_id", idFactura); 
+        
+        try {
+            // ... (código existente para cargar el stream)
+            InputStream stream = ReportUtils.class.getResourceAsStream(ruta);
+            if (stream == null) {
+                 throw new IllegalArgumentException("No se encontró el reporte: " + ruta);
+            }
+            
+            JasperReport report = JasperCompileManager.compileReport(stream);
+            
+            // 3. Pasar el mapa de parámetros al método fillReport
+            // Antes pasabas 'null', ahora pasas 'parametros'
+            JasperPrint print = JasperFillManager.fillReport(report, parametros, con); // ¡CAMBIO AQUÍ!
 
             JRViewer viewer = new JRViewer(print);
             escritorio.removeAll();
@@ -401,7 +437,7 @@ public class Main extends javax.swing.JFrame {
 
     private void itemNuevoPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemNuevoPedidoActionPerformed
        try {
-           mostrarVentana(new PedidosyFacturacion());
+           mostrarVentana(new PedidosyFacturacion(escritorio));
        } catch (SQLException ex) {
            System.getLogger(Main.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
        }

@@ -2,6 +2,7 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+<<<<<<< HEAD
         <group>
             <file>file:/C:/Users/dinae/OneDrive/Documentos/NetBeansProjects/ProyectoFinal/src/Formulario/Cliente.java</file>
             <file>file:/C:/Users/dinae/OneDrive/Documentos/NetBeansProjects/ProyectoFinal/src/Formulario/Reportes.java</file>
@@ -10,5 +11,8 @@
             <file>file:/C:/Users/dinae/OneDrive/Documentos/NetBeansProjects/ProyectoFinal/src/Formulario/PedidosyFacturacion.java</file>
             <file>file:/C:/Users/dinae/OneDrive/Documentos/NetBeansProjects/ProyectoFinal/src/Formulario/Empleados.java</file>
         </group>
+=======
+        <group/>
+>>>>>>> e5da188edb97be742e1e8cc8d7a9148ca3383a33
     </open-files>
 </project-private>

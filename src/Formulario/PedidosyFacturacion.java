@@ -9,6 +9,7 @@ package Formulario;
 
 import javax.swing.JOptionPane;
 import Conexion.Conexion;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.Statement;
@@ -41,6 +42,18 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.JDesktopPane;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.swing.JRViewer;
+
+import javax.swing.JDesktopPane;
+import javax.swing.JFrame;
+import net.sf.jasperreports.engine.JRException;
 /**
  *
  * @author Coloc
@@ -49,6 +62,7 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
     Conexion ConexionPostgres = new Conexion();
     Connection con;
     private long ultimoFacturaIdGenerado = -1;
+    private static JDesktopPane escritorioPrincipal;
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PedidosyFacturacion.class.getName());
 
@@ -57,11 +71,12 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
      */
     private DefaultTableModel modeloTabla; 
     
-    public PedidosyFacturacion() throws SQLException {
+    public PedidosyFacturacion(JDesktopPane escritorio) throws SQLException {
         initComponents();
         con = ConexionPostgres.getConexion();
         inicializarTablaPedido();
         configurarListenerTabla();
+        this.escritorioPrincipal = escritorio;
         
     }
     
@@ -133,6 +148,8 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
         txtIdEmpleado = new javax.swing.JTextField();
         btnComprar = new javax.swing.JButton();
         btnCalcularDescuento = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        btnCerrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -268,6 +285,20 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
             }
         });
 
+        jButton1.setText("Generar Factura");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        btnCerrar.setText("Cerrar");
+        btnCerrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCerrarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -356,13 +387,17 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(btnEliminarProducto))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel16)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtIdEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel16)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(txtIdEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(btnCerrar))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(btnComprar)
-                                    .addComponent(btnCalcularDescuento))))
+                                    .addComponent(btnCalcularDescuento)
+                                    .addComponent(jButton1))))
                         .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(207, 207, 207)
@@ -435,7 +470,11 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
                 .addComponent(btnComprar)
-                .addGap(153, 153, 153))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(btnCerrar))
+                .addGap(112, 112, 112))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -607,6 +646,67 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
         }
         
     }//GEN-LAST:event_btnComprarActionPerformed
+public class ReportUtils {
+    
+    public static void mostrarReporteFac(String ruta, Connection con, JDesktopPane escritorio, Map<String, Object> parametros) {
+        
+try {
+            // 1. Verificar si el archivo JRXML existe
+            InputStream stream = ReportUtils.class.getResourceAsStream(ruta);
+            if (stream == null) {
+                // Si el archivo no se encuentra, lanzamos una excepción clara
+                throw new IllegalArgumentException("No se encontró el archivo del reporte: " + ruta);
+            }
+
+            // 2. Compilar el reporte JRXML a JasperReport
+            JasperReport report = JasperCompileManager.compileReport(stream);
+
+            // 3. Llenar el reporte (Ejecutar el Query SQL)
+            // Se pasa la lista de 'parametros' (que puede estar vacía o contener el ID)
+            JasperPrint print = JasperFillManager.fillReport(report, parametros , con);
+
+            // 4. Mostrar el reporte en el JDesktopPane
+            JRViewer viewer = new JRViewer(print);
+
+            //Limpiar y mostrar el nuevo reporte en el escritorio
+            escritorio.removeAll();
+            escritorio.add(viewer);
+            viewer.setBounds(0, 0, escritorio.getWidth(), escritorio.getHeight());
+            viewer.setVisible(true); // Asegurar visibilidad
+            escritorio.revalidate();
+            escritorio.repaint(); 
+
+        } catch (JRException e) {
+            // Error específico de JasperReports (compilación, llenado)
+            JOptionPane.showMessageDialog(null, "Error de JasperReports: " + e.getMessage(), "Error en Reporte", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(ReportUtils.class.getName()).log(Level.SEVERE, "Error en el motor de reportes", e);
+        } catch (IllegalArgumentException e) {
+             // Error si el archivo no existe
+             JOptionPane.showMessageDialog(null, e.getMessage(), "Error de Ruta", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            // Cualquier otro error inesperado (IO, etc.)
+            JOptionPane.showMessageDialog(null, "Error al generar reporte: " + e.getMessage(), "Error Desconocido", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(ReportUtils.class.getName()).log(Level.SEVERE, "Error desconocido al generar reporte", e);
+        }
+    }
+}
+ 
+    
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        
+        long idFacturaGenerado = this.ultimoFacturaIdGenerado;
+        Map<String, Object> params = new HashMap<>();
+        params.put("factura_id", idFacturaGenerado);
+        ReportUtils.mostrarReporteFac("/Reportes/jrFactura.jrxml", con, this.escritorioPrincipal, params);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
+     try {
+        this.dispose(); // Cierra solo este JInternalFrame
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    }//GEN-LAST:event_btnCerrarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -758,6 +858,7 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
+        
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -770,14 +871,16 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
+        /*Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
+            
             try {
-                new PedidosyFacturacion().setVisible(true);
+                new PedidosyFacturacion(escritorioPrincipal).setVisible(true);
             } catch (SQLException ex) {
                 System.getLogger(PedidosyFacturacion.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
             }
-        });
+
+        }); 
     }
 
     public void calcularYActualizarSubTotal(){
@@ -1119,9 +1222,11 @@ public void guardarDetalleFactura(long idFacturaCorrespondiente) throws SQLExcep
     private javax.swing.JButton btnAnadir;
     private javax.swing.JButton btnBuscarCliente;
     private javax.swing.JButton btnCalcularDescuento;
+    private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnComprar;
     private javax.swing.JButton btnEliminarProducto;
     private javax.swing.JComboBox<String> cmbProductos;
+    private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
