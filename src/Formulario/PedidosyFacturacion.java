@@ -152,7 +152,11 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
         btnComprar = new javax.swing.JButton();
         btnCalcularDescuento = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+<<<<<<< HEAD
         btnNuevoPedido = new javax.swing.JButton();
+=======
+        btnCerrar = new javax.swing.JButton();
+>>>>>>> 710b871f165ee9fd02b754db300b363291b6355b
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -298,10 +302,17 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
             }
         });
 
+<<<<<<< HEAD
         btnNuevoPedido.setText("Nuevo Pedido");
         btnNuevoPedido.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNuevoPedidoActionPerformed(evt);
+=======
+        btnCerrar.setText("Cerrar");
+        btnCerrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCerrarActionPerformed(evt);
+>>>>>>> 710b871f165ee9fd02b754db300b363291b6355b
             }
         });
 
@@ -394,6 +405,7 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(btnEliminarProducto))
+<<<<<<< HEAD
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(btnComprar)
@@ -403,6 +415,15 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
                                         .addComponent(txtIdEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(18, 18, 18)
                                 .addComponent(jButton1)
+=======
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel16)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(txtIdEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(btnCerrar))
+>>>>>>> 710b871f165ee9fd02b754db300b363291b6355b
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(btnCalcularDescuento, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -479,11 +500,20 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
                 .addGap(6, 6, 6)
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
+<<<<<<< HEAD
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnComprar)
                     .addComponent(jButton1)
                     .addComponent(btnNuevoPedido))
                 .addGap(24, 24, 24))
+=======
+                .addComponent(btnComprar)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(btnCerrar))
+                .addGap(112, 112, 112))
+>>>>>>> 710b871f165ee9fd02b754db300b363291b6355b
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -730,6 +760,7 @@ try {
         ReportUtils.mostrarReporteFac("/Reportes/factura2.jrxml", con, this.escritorioPrincipal, params);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+<<<<<<< HEAD
     private void btnNuevoPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoPedidoActionPerformed
     txtNit.setText("");
     lblNombre.setText("");
@@ -754,6 +785,15 @@ try {
     txtNit.requestFocus();
     
     }//GEN-LAST:event_btnNuevoPedidoActionPerformed
+=======
+    private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
+     try {
+        this.dispose(); // Cierra solo este JInternalFrame
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    }//GEN-LAST:event_btnCerrarActionPerformed
+>>>>>>> 710b871f165ee9fd02b754db300b363291b6355b
 
     /**
      * @param args the command line arguments
@@ -1326,6 +1366,7 @@ public class inventarioDAO{
     private javax.swing.JButton btnAnadir;
     private javax.swing.JButton btnBuscarCliente;
     private javax.swing.JButton btnCalcularDescuento;
+    private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnComprar;
     private javax.swing.JButton btnEliminarProducto;
     private javax.swing.JButton btnNuevoPedido;

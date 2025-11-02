@@ -19,8 +19,11 @@ import javax.swing.text.DateFormatter;
 import proyectofinal.SesionUsuario;
 
 
+<<<<<<< HEAD
+=======
 
 
+>>>>>>> e5da188edb97be742e1e8cc8d7a9148ca3383a33
 public class Cliente extends javax.swing.JInternalFrame {
 
     Conexion conexionPostgres = new Conexion();
@@ -59,18 +62,18 @@ public class Cliente extends javax.swing.JInternalFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        txtId = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        txtNombre = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        txtId = new javax.swing.JTextField();
+        txtNombre = new javax.swing.JTextField();
         txtTelefono = new javax.swing.JTextField();
         txtCorreo = new javax.swing.JTextField();
         txtDireccion = new javax.swing.JTextField();
         txtFechaIngreso = new javax.swing.JFormattedTextField();
-        jLabel8 = new javax.swing.JLabel();
         txtNit = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         btnRegistrar = new javax.swing.JButton();
@@ -80,7 +83,7 @@ public class Cliente extends javax.swing.JInternalFrame {
         btnLimpiar1 = new javax.swing.JButton();
         btnCerrar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Clientes");
 
         jPanel1.setBackground(new java.awt.Color(204, 255, 204));
@@ -97,6 +100,8 @@ public class Cliente extends javax.swing.JInternalFrame {
 
         jLabel7.setText("Fecha Ingreso: ");
 
+        jLabel8.setText("NIT:");
+
         txtDireccion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtDireccionActionPerformed(evt);
@@ -104,8 +109,6 @@ public class Cliente extends javax.swing.JInternalFrame {
         });
 
         txtFechaIngreso.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
-
-        jLabel8.setText("NIT:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
