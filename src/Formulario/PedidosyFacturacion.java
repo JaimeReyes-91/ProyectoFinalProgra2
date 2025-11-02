@@ -626,26 +626,37 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
             
             guardarDetalleFactura(idGenerado);
             
+            inventarioDAO inventarioDAO = new inventarioDAO();
+            inventarioDAO.actualizarInventarioYValidarStock(tblPedido);
+            JOptionPane.showMessageDialog(this, "Pedido Realizado", "Pedido Efectuado", JOptionPane.INFORMATION_MESSAGE);
+            
             con.commit();
         
         }catch (SQLException e){
             try{
             con.rollback();
-            JOptionPane.showMessageDialog(this, "Error en la base de datos: Transacción deshecha. Detalle:" + e.getMessage(), "Error DB", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error en la base de datos: Transacción deshecha. Detalle SQLException :" + e.getMessage(), "Error DB", JOptionPane.ERROR_MESSAGE);
             } catch (SQLException ex){
-                JOptionPane.showMessageDialog(this, "Error al realizar el rollback. Detalle:" + ex.getMessage(), "Error en el rollback", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Error al realizar el rollback. Detalle SQLException :" + ex.getMessage(), "Error en el rollback", JOptionPane.ERROR_MESSAGE);
             }  
         }catch (RuntimeException exc){
             try{
                 con.rollback();
-                JOptionPane.showMessageDialog(this, "Error al ingresar cantidades o datos: Transacción deshecha. Detalle:" + exc.getMessage(), "Error DB", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Error al ingresar cantidades o datos: Transacción deshecha. Detalle Runtime :" + exc.getMessage(), "Error DB", JOptionPane.ERROR_MESSAGE);
             }catch (SQLException exce){
-                JOptionPane.showMessageDialog(this, "Error al realizar el rollback: Transacción deshecha. Detalle:" + exce.getMessage(), "Error en el rollback", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Error al realizar el rollback: Transacción deshecha. Detalle RunTime :" + exce.getMessage(), "Error en el rollback", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            try {
+                con.rollback();
+                JOptionPane.showMessageDialog(this, "Error en la base de datos: Transacción deshecha. Detalle Exception :" + e.getMessage(), "Error DB", JOptionPane.ERROR_MESSAGE);
+            } catch (SQLException excep) {
+                JOptionPane.showMessageDialog(this, "Error al realizar el rollback: Transacción deshecha. Detalle Exception:" + excep.getMessage(), "Error en el rollback", JOptionPane.ERROR_MESSAGE);
             }
         } finally {
             try{
                 con.setAutoCommit(autoCommitOriginal);
-                JOptionPane.showMessageDialog(this, "Pedido Realizado", "Pedido Efectuado", JOptionPane.INFORMATION_MESSAGE);
+                
             } catch (SQLException exce){
                 JOptionPane.showMessageDialog(this, "Error al restaurar el AutoCommit. Detalle:" + exce.getMessage(), "Error en el AutoCommit", JOptionPane.ERROR_MESSAGE );
             }
@@ -658,24 +669,24 @@ public class ReportUtils {
  
         
 try {
-            // 1. Verificar si el archivo JRXML existe
+            // 1. Verifcar si el archivo JRXML existe
             InputStream stream = ReportUtils.class.getResourceAsStream(ruta);
             if (stream == null) {
-                // Si el archivo no se encuentra, lanzamos una excepción clara
+                // Si el archivo no se encuentra, lanzamos una excepción 
                 throw new IllegalArgumentException("No se encontró el archivo del reporte: " + ruta);
             }
 
             // 2. Compilar el reporte JRXML a JasperReport
             JasperReport report = JasperCompileManager.compileReport(stream);
 
-            // 3. Llenar el reporte (Ejecutar el Query SQL)
-            // Se pasa la lista de 'parametros' (que puede estar vacía o contener el ID)
+            // 3. Llenar el reorte (Ejecutar el Query SQL)
+            // Se pasa la lista de parametros que puede estar vacía o contener el i d
             JasperPrint print = JasperFillManager.fillReport(report, parametros , con);
 
             // 4. Mostrar el reporte en el JDesktopPane
             JRViewer viewer = new JRViewer(print);
 
-            //Limpiar y mostrar el nuevo reporte en el escritorio
+            //Limpiar y mostrar el nuevo report en el escritorio
             escritorio.removeAll();
             escritorio.add(viewer);
             viewer.setBounds(0, 0, escritorio.getWidth(), escritorio.getHeight());
@@ -688,18 +699,18 @@ try {
                 stream.close();
                 }
                 } catch (IOException ex) {
-                // Manejo de la excepción de cierre
+                // Manejo de la excpción de cierre
             }
 
         } catch (JRException e) {
-            // Error específico de JasperReports (compilación, llenado)
+            // Error específico de JasperReports compilación, llenado
             JOptionPane.showMessageDialog(null, "Error de JasperReports: " + e.getMessage(), "Error en Reporte", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(ReportUtils.class.getName()).log(Level.SEVERE, "Error en el motor de reportes", e);
         } catch (IllegalArgumentException e) {
              // Error si el archivo no existe
              JOptionPane.showMessageDialog(null, e.getMessage(), "Error de Ruta", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
-            // Cualquier otro error inesperado (IO, etc.)
+            // Cualquier otro error inesperado IO, etc.
             JOptionPane.showMessageDialog(null, "Error al generar reporte: " + e.getMessage(), "Error Desconocido", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(ReportUtils.class.getName()).log(Level.SEVERE, "Error desconocido al generar reporte", e);
         }
@@ -734,7 +745,9 @@ try {
     lblsubTotalPedido.setText("");
     lblTotalPedido.setText("");
     
+    //resetear el ultimo id generado de factura
     this.ultimoFacturaIdGenerado = 0;
+    // moverse al txt Nit
     txtNit.requestFocus();
     
     }//GEN-LAST:event_btnNuevoPedidoActionPerformed
@@ -1248,6 +1261,63 @@ public void guardarDetalleFactura(long idFacturaCorrespondiente) throws SQLExcep
             throw new RuntimeException("Error en el formato de datos", e);      
     }
 }
+
+public class inventarioDAO{
+    public boolean actualizarInventarioYValidarStock(JTable tblPedido) throws Exception{
+        
+        String selectStock= "SELECT nombre_producto,stock,disponibilidad FROM public.productos WHERE producto_id = ?";
+        String updateStock= "UPDATE public.productos SET stock = stock - ?, disponibilidad = ? WHERE producto_id = ?";
+        
+        DefaultTableModel modelo = (DefaultTableModel) tblPedido.getModel();
+        int filas = modelo.getRowCount();
+        int stockActual = 0;
+        
+        //1. Recorreer la tabla de pedidos:
+        for (int i=0; i < filas; i++){
+            
+            //obtener los datos de la fila del Jtable
+            int productoId = (int) modelo.getValueAt(i, 0);
+            String nombreProducto = (String) modelo.getValueAt(i, 1);
+            int cantidadComprar = (int) modelo.getValueAt(i, 2);
+            
+            //Paso de validacion de Stock
+            try(PreparedStatement psSelect = con.prepareStatement(selectStock)){
+                psSelect.setInt(1, productoId);
+                
+                try(ResultSet rs = psSelect.executeQuery()){
+                    if (rs.next()){
+                        stockActual = rs.getInt("stock");
+                        
+                        // validar si el stock es suficiente
+                        if (stockActual < cantidadComprar){
+                            int faltante = cantidadComprar - stockActual;
+                            // si esto pasa lanzar un excepcio
+                            throw new  Exception ("Stock insuficiente. El producto " + nombreProducto + "Solo tiene" + stockActual + "unidades disponibles ");
+                        }
+                    } else{
+                        throw new SQLException("Error, el id de producto:" + productoId + "no esta registrado en productos");
+                    }
+                }
+                
+            }
+            
+            //Actualizacion de inventario 
+            // determinar el nuevo stock y la disponibilidad
+            int nuevoStock = stockActual - cantidadComprar; 
+            //Disponibilidad será true si el nuevo stock eso mayor a 0
+            boolean nuevaDisponibilidad = nuevoStock > 0;
+            try(PreparedStatement psUpdate= con.prepareStatement(updateStock)){
+                psUpdate.setInt(1, cantidadComprar);
+                psUpdate.setBoolean(2, nuevaDisponibilidad);
+                psUpdate.setInt(3, productoId);
+                psUpdate.executeUpdate();         
+            }
+        }
+        return true; // todo el inventario se actualizó corerectamente    
+}
+}
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarCliente;
     private javax.swing.JButton btnAnadir;
