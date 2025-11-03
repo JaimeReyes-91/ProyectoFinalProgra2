@@ -47,6 +47,7 @@ import net.sf.jasperreports.swing.JRViewer;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
+import javax.swing.SwingUtilities;
 import net.sf.jasperreports.engine.JRException;
 import proyectofinal.SesionUsuario;
 
@@ -57,6 +58,7 @@ import proyectofinal.SesionUsuario;
 public class PedidosyFacturacion extends javax.swing.JInternalFrame {
     Conexion ConexionPostgres = new Conexion();
     Connection con;
+    
     private long ultimoFacturaIdGenerado = -1;
     private static JDesktopPane escritorioPrincipal;
     
@@ -71,7 +73,8 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
         inicializarTablaPedido();
         configurarListenerTabla();
         this.escritorioPrincipal = escritorio;
-        txtIdEmpleado.setText(String.valueOf(SesionUsuario.getIdUsuario()));
+        txtIdEmpleado.setText(String.valueOf(SesionUsuario.getUsuarioActual()));
+        llenarComboProductosDisponibles();
     }
     
     private void inicializarTablaPedido() {
@@ -86,6 +89,27 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
         };    
         
         tblPedido.setModel(modeloTabla);
+    }
+    
+    private void llenarComboProductosDisponibles() {
+        try {
+            cmbProductos.removeAllItems();
+            String sql = "SELECT producto_id, nombre_producto, stock FROM productos "
+                       + "WHERE disponibilidad = true AND stock > 0 ORDER BY nombre_producto";
+            try (PreparedStatement ps = con.prepareStatement(sql);
+                 ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    int id = rs.getInt("producto_id");
+                    String nombre = rs.getString("nombre_producto");
+                    int stock = rs.getInt("stock");
+                    cmbProductos.addItem(id + " - " + nombre + " (" + stock + " disponibles)");
+                }
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al cargar productos disponibles: " + ex.getMessage(),
+                    "Error de base de datos", JOptionPane.ERROR_MESSAGE);            
+        }
     }
 
     /**
@@ -151,6 +175,11 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
         jLabel2.setText("Producto");
 
         cmbProductos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Coca-Cola", "Pepsi" }));
+        cmbProductos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbProductosActionPerformed(evt);
+            }
+        });
 
         txtCantidad.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtCantidad.addActionListener(new java.awt.event.ActionListener() {
@@ -514,30 +543,123 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    private boolean productoDisponible(int idProducto) throws SQLException {
+        boolean disponible = false;
+        String sql = "SELECT disponibilidad FROM productos WHERE producto_id = ?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idProducto);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    disponible = rs.getBoolean("disponibilidad");
+                }
+            }
+        }
+        return disponible;
+    }
+    
+    private int obtenerIdProductoSeleccionado() {
+    Object seleccionado = cmbProductos.getSelectedItem();
+    if (seleccionado == null) return -1; 
+    
+    try {
+        return Integer.parseInt(seleccionado.toString().split(" - ")[0].trim());
+    } catch (NumberFormatException e) {
+        return -1; 
+    }
+    }
+    
+    private int obtenerStockProducto(int idProducto) throws SQLException {
+    String sql = "SELECT stock FROM productos WHERE producto_id = ?";
+    try (PreparedStatement ps = con.prepareStatement(sql)) {
+        ps.setInt(1, idProducto);
+        try (ResultSet rs = ps.executeQuery()) {
+            return rs.next() ? rs.getInt("stock") : 0;
+            }
+        }
+    }
+    
+    private String obtenerNombreProducto(int idProducto) throws SQLException {
+    String sql = "SELECT nombre_producto FROM productos WHERE producto_id = ?";
+    try (PreparedStatement ps = con.prepareStatement(sql)) {
+        ps.setInt(1, idProducto);
+        try (ResultSet rs = ps.executeQuery()) {
+            return rs.next() ? rs.getString("nombre_producto") : "";
+        }
+    }
+    }
+    
+    private double obtenerPrecioProducto(int idProducto) throws SQLException {
+    String sql = "SELECT precio FROM productos WHERE producto_id = ?";
+    try (PreparedStatement ps = con.prepareStatement(sql)) {
+        ps.setInt(1, idProducto);
+        try (ResultSet rs = ps.executeQuery()) {
+            return rs.next() ? rs.getDouble("precio") : 0.0;
+        }
+    }
+    }
+    
+    private void actualizarStock(int idProducto, int cambio) throws SQLException {
+    String sql = "UPDATE productos SET stock = stock - ? WHERE producto_id = ?";
+    try (PreparedStatement ps = con.prepareStatement(sql)) {
+        ps.setInt(1, cambio);
+        ps.setInt(2, idProducto);
+        ps.executeUpdate();
+    }
+    }
+    
     private void btnAnadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnadirActionPerformed
-        // TODO add your handling code here:
-        if (txtCantidad.getText().isEmpty() || cmbProductos.getSelectedIndex() < 0) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar un producto y especificar la cantidad.", "Error", JOptionPane.WARNING_MESSAGE);
+        if (txtCantidad.getText().trim().isEmpty() || cmbProductos.getSelectedIndex() < 0) {
+        JOptionPane.showMessageDialog(this, "Debe seleccionar un producto y especificar la cantidad.", "Error", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    int idProducto = obtenerIdProductoSeleccionado();
+    
+    if (idProducto <= 0) {
+        
+        return;
+    }
+    int cantidad;
+
+    try {
+        cantidad = Integer.parseInt(txtCantidad.getText());
+        if (cantidad <= 0) throw new NumberFormatException();
+        
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Cantidad inválida.", "Error", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    try {
+        cantidad = Integer.parseInt(txtCantidad.getText().trim());
+        if (cantidad <= 0) {
+            JOptionPane.showMessageDialog(this, "La cantidad debe ser mayor a 0.", "Error de cantidad", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        try{
-            int cantidad = Integer.parseInt(txtCantidad.getText());
-            if (cantidad <= 0){
-                throw new NumberFormatException("La cantidad debe ser mayor a 0");
-            }
-        } catch (NumberFormatException e){
-            e.getMessage();
-            JOptionPane.showMessageDialog(this, "La cantidad debe ser un número entero positivo" + "Error de cantidad" + e);
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "La cantidad debe ser un número entero válido.", "Error de cantidad", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    try {
+        int stockDisponible = obtenerStockProducto(idProducto);
+        if (cantidad > stockDisponible) {
+            JOptionPane.showMessageDialog(this, "Stock insuficiente. Disponible: " + stockDisponible, "Error", JOptionPane.WARNING_MESSAGE);
+            return;
         }
 
-        try {
-            llenartablaPedidos();
-            calcularYActualizarSubTotal();
-            calcularRecargoYTotales();
-        } catch (SQLException ex) {
-            System.getLogger(PedidosyFacturacion.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-        }
+        double precio = obtenerPrecioProducto(idProducto);
+        double importe = precio * cantidad;
+
+        modeloTabla.addRow(new Object[]{idProducto, obtenerNombreProducto(idProducto), cantidad, precio, importe});
+        actualizarStock(idProducto, -cantidad);
+        calcularYActualizarSubTotal();
+        calcularRecargoYTotales();
+        llenarComboProductosDisponibles();
+
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(this, "Error de BD: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_btnAnadirActionPerformed
 
     private void txtCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantidadActionPerformed
@@ -592,23 +714,58 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
         
         calcularRecargoYTotales();
     }//GEN-LAST:event_jComboBox1ActionPerformed
+private void devolverStockProducto(int idProducto, int cantidadDevuelta) throws SQLException {
+    if (cantidadDevuelta <= 0) return;
+    String sql = "UPDATE productos SET stock = stock + ? WHERE producto_id = ?";
+    try (PreparedStatement ps = con.prepareStatement(sql)) {
+        ps.setInt(1, cantidadDevuelta);
+        ps.setInt(2, idProducto);
+        ps.executeUpdate();
+    }
+}
 
     private void btnEliminarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarProductoActionPerformed
 
-        DefaultTableModel modelo = (DefaultTableModel) tblPedido.getModel();
-        
-        int filaSeleccionada = tblPedido.getSelectedRow();
-        
-        if (filaSeleccionada >= 0){
-            modelo.removeRow(filaSeleccionada);
-           
-            calcularYActualizarSubTotal();
-            calcularRecargoYTotales();   
-    } else{            
-            JOptionPane.showMessageDialog(this, "Selecciona la fila del producto que desea eliminar", "Advertencia", JOptionPane.WARNING_MESSAGE );
-        }
-    }//GEN-LAST:event_btnEliminarProductoActionPerformed
+        int fila = tblPedido.getSelectedRow();
+    if (fila < 0) {
+        JOptionPane.showMessageDialog(this, "Seleccione un producto para eliminar.", 
+                "Aviso", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
 
+    int confirm = JOptionPane.showConfirmDialog(this, 
+            "¿Desea eliminar el producto seleccionado y devolverlo al inventario?", 
+            "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+
+    if (confirm != JOptionPane.YES_OPTION) return;
+
+    try {
+        int idProducto = Integer.parseInt(tblPedido.getValueAt(fila, 0).toString());
+        int cantidadDevuelta = Integer.parseInt(tblPedido.getValueAt(fila, 2).toString());
+
+        devolverStockProducto(idProducto, cantidadDevuelta);
+
+        ((DefaultTableModel) tblPedido.getModel()).removeRow(fila);
+
+        calcularYActualizarSubTotal();
+        calcularRecargoYTotales();
+        llenarComboProductosDisponibles();
+
+        JOptionPane.showMessageDialog(this, 
+                "Producto eliminado y stock actualizado correctamente.", 
+                "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, 
+                "Error al devolver el stock: " + e.getMessage(), 
+                "Error BD", JOptionPane.ERROR_MESSAGE);
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, 
+                "Error al leer los datos del producto seleccionado.", 
+                "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    }//GEN-LAST:event_btnEliminarProductoActionPerformed
+    
     private void txtIdEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdEmpleadoActionPerformed
         
     }//GEN-LAST:event_txtIdEmpleadoActionPerformed
@@ -748,6 +905,32 @@ try {
             e.printStackTrace();
         }
     }//GEN-LAST:event_btnCerrarActionPerformed
+
+    
+    private void cmbProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbProductosActionPerformed
+    try {
+        cmbProductos.removeAllItems(); 
+        String sql = "SELECT producto_id, nombre_producto, stock FROM productos "
+                   + "WHERE disponibilidad = true AND stock > 0 ORDER BY nombre_producto";
+        
+        try (PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                int id = rs.getInt("producto_id");
+                String nombre = rs.getString("nombre_producto");
+                int stock = rs.getInt("stock");
+                cmbProductos.addItem(id + " - " + nombre + " (" + stock + " disponibles)");
+            }
+        }
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(this,
+                "Error al cargar productos disponibles: " + ex.getMessage(),
+                "Error de base de datos",
+                JOptionPane.ERROR_MESSAGE);
+        ex.printStackTrace();
+    }
+    
+    }//GEN-LAST:event_cmbProductosActionPerformed
 
     
     
@@ -1099,7 +1282,7 @@ public long getIdCliente()throws SQLException{
 public long guardarFactura(String numeroSerie)throws SQLException{
 
     long clienteId = 0;
-    long empleadoId = 0;
+    int usuario_id = 0;
     BigDecimal total = null;
     BigDecimal subTotal = null;
     String txtDescInput = null;
@@ -1109,11 +1292,11 @@ public long guardarFactura(String numeroSerie)throws SQLException{
     BigDecimal descuentoFinal = null;
     
     long idGenerado = -1;
-    String insertQry = "INSERT INTO public.facturas (cliente_id, empleado_id, total, numero_serie, subtotal, descuento, iva, forma_pago) VALUES (?,?,?,?,?,?,?,?) RETURNING factura_id";
+    String insertQry = "INSERT INTO public.facturas (cliente_id, usuario_id, total, numero_serie, subtotal, descuento, iva, forma_pago) VALUES (?,?,?,?,?,?,?,?) RETURNING factura_id";
     
     try{
     clienteId = getIdCliente();
-    empleadoId = Long.parseLong(txtIdEmpleado.getText());
+    usuario_id = Integer.parseInt(String.valueOf(SesionUsuario.getIdUsuario()));
     total = new BigDecimal(lblTotalPedido.getText());
     subTotal = new BigDecimal (lblsubTotalPedido.getText());
     
@@ -1136,7 +1319,7 @@ public long guardarFactura(String numeroSerie)throws SQLException{
         
         
         ps.setLong(1, clienteId);
-        ps.setLong(2, empleadoId);
+        ps.setLong(2, usuario_id);
         ps.setBigDecimal(3, total);
         ps.setString(4, numeroSerie);
         ps.setBigDecimal(5, subTotal);

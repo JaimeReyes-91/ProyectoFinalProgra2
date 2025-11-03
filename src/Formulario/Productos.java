@@ -10,9 +10,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.sql.Statement;
 import java.sql.ResultSet;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -30,12 +32,12 @@ public class Productos extends javax.swing.JInternalFrame {
         initComponents();
         try{
             con = conexionPostgres.getConexion();
-            
         }catch (SQLException e){
             e.getMessage();
         }
     }
-
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -250,7 +252,7 @@ public class Productos extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+        
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
         
         try{
