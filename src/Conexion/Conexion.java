@@ -38,7 +38,7 @@ public class Conexion {
     
     public Conexion(){
 
-    String path = "C:\\Users\\dinae\\OneDrive\\Documentos\\NetBeansProjects\\ProyectoFinal\\src\\Conexion\\db_config.properties";
+    String path = "C:\\Users\\Coloc\\OneDrive\\Escritorio\\Proyecto Final Progra II\\ProyectoFinalProgra2\\src\\Conexion\\db_config.properties";
 
 
         InputStream in=null;

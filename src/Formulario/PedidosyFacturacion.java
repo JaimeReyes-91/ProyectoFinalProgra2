@@ -174,7 +174,6 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Producto");
 
-        cmbProductos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Coca-Cola", "Pepsi" }));
         cmbProductos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbProductosActionPerformed(evt);
@@ -652,7 +651,7 @@ public class PedidosyFacturacion extends javax.swing.JInternalFrame {
         double importe = precio * cantidad;
 
         modeloTabla.addRow(new Object[]{idProducto, obtenerNombreProducto(idProducto), cantidad, precio, importe});
-        actualizarStock(idProducto, -cantidad);
+        actualizarStock(idProducto, cantidad);
         calcularYActualizarSubTotal();
         calcularRecargoYTotales();
         llenarComboProductosDisponibles();
@@ -788,8 +787,8 @@ private void devolverStockProducto(int idProducto, int cantidadDevuelta) throws 
             
             guardarDetalleFactura(idGenerado);
             
-            inventarioDAO inventarioDAO = new inventarioDAO();
-            inventarioDAO.actualizarInventarioYValidarStock(tblPedido);
+            //inventarioDAO inventarioDAO = new inventarioDAO();
+            //inventarioDAO.actualizarInventarioYValidarStock(tblPedido);
             JOptionPane.showMessageDialog(this, "Pedido Realizado", "Pedido Efectuado", JOptionPane.INFORMATION_MESSAGE);
             
             con.commit();
@@ -908,7 +907,8 @@ try {
 
     
     private void cmbProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbProductosActionPerformed
-    try {
+    /*
+        try {
         cmbProductos.removeAllItems(); 
         String sql = "SELECT producto_id, nombre_producto, stock FROM productos "
                    + "WHERE disponibilidad = true AND stock > 0 ORDER BY nombre_producto";
@@ -929,11 +929,9 @@ try {
                 JOptionPane.ERROR_MESSAGE);
         ex.printStackTrace();
     }
-    
+    */
     }//GEN-LAST:event_cmbProductosActionPerformed
-
-    
-    
+ 
     public int  getIdProducto() throws SQLException{
         int idProducto = -1; 
         try {
